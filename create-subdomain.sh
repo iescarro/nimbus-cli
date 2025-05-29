@@ -1,56 +1,46 @@
 #!/bin/bash
 
-# Usage: ./create-subdomain.sh USER subdomain.domain.com IP_ADDRESS [DOCUMENT_ROOT]
+# Usage: ./create-site.sh USER DOMAIN
+# Example: ./create-site.sh nebulom bagdok.online
 
-$USER=$1
-SUBDOMAIN=$2
-IP=$3
-DOCROOT=$4
-
-if [ -z "$SUBDOMAIN" ] || [ -z "$IP" ]; then
-  echo "Usage: $0 subdomain.domain.com IP_ADDRESS [DOCUMENT_ROOT]"
-  exit 1
+# Check for required parameters
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: $0 USER DOMAIN"
+    exit 1
 fi
 
-# Extract short domain (e.g. pustahe from pustahe.net)
-DOMAIN_NAME=$(echo "$SUBDOMAIN" | cut -d'.' -f2,3)
+USER="$1"
+DOMAIN="$2"
+BASE_DIR="/home/$USER/domains/$DOMAIN/public_html"
+CONF_FILE="/etc/apache2/sites-available/$DOMAIN.conf"
+LOG_NAME=$(echo "$DOMAIN" | tr '.' '_')
 
-# Default document root if not provided
-if [ -z "$DOCROOT" ]; then
-  DOCROOT="/home/$USER/domains/$SUBDOMAIN/public_html"
-fi
+# Create directory structure
+mkdir -p "$BASE_DIR"
+chown -R "$USER:$USER" "/home/$USER/domains/$DOMAIN"
+chmod -R 755 "/home/$USER/domains/$DOMAIN"
 
-# Create directories if they don't exist
-mkdir -p "$DOCROOT"
-
-# Set permissions
-chown -R "$USER":"$USER" "/home/$USER/domains"
-chmod -R 755 "/home/$USER/domains"
-
-# Apache config
-CONF_FILE="/etc/apache2/sites-available/$SUBDOMAIN.conf"
-
+# Create Apache config
 cat <<EOF | sudo tee "$CONF_FILE" > /dev/null
-<VirtualHost $IP:80>
-    ServerAdmin webmaster@$DOMAIN_NAME
-    DocumentRoot $DOCROOT
-    ServerName $SUBDOMAIN
-    ServerAlias www.$SUBDOMAIN
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot $BASE_DIR
+    ServerName $DOMAIN
+    ServerAlias www.$DOMAIN
 
-    <Directory $DOCROOT>
+    <Directory $BASE_DIR>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
 
-    ErrorLog \${APACHE_LOG_DIR}/${SUBDOMAIN}_error.log
-    CustomLog \${APACHE_LOG_DIR}/${SUBDOMAIN}_access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/${LOG_NAME}_error.log
+    CustomLog \${APACHE_LOG_DIR}/${LOG_NAME}_access.log combined
 </VirtualHost>
 EOF
 
-# Enable site & mod_rewrite, then restart Apache
-sudo a2ensite "$SUBDOMAIN.conf"
-sudo a2enmod rewrite
+# Enable the site and reload Apache
+sudo a2ensite "$DOMAIN.conf"
 sudo systemctl reload apache2
 
-echo "✅ Subdomain $SUBDOMAIN configured and Apache reloaded."
+echo "✅ Site setup complete for $DOMAIN under user $USER"
