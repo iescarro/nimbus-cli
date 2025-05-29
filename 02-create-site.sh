@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage: ./create-site.sh USER DOMAIN
-# Example: ./create-site.sh nebulom bagdok.online
+# Example: ./create-site.sh user mydomain.com
 
 # Check for required parameters
 if [ -z "$1" ] || [ -z "$2" ]; then
