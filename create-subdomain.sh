@@ -1,19 +1,20 @@
 #!/bin/bash
 
-# Usage: ./create-site.sh USER DOMAIN
-# Example: ./create-site.sh user mydomain.com
-
+# Usage: ./create-subdomain.sh USER DOMAIN SUBDOMAIN
+# Example: ./create-subdomain.sh user site subdomain
 # Check for required parameters
-if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "Usage: $0 USER DOMAIN"
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+    echo "Usage: $0 USER DOMAIN SUBDOMAIN"
     exit 1
 fi
 
 USER="$1"
 DOMAIN="$2"
-BASE_DIR="/home/$USER/domains/$DOMAIN/public_html"
-CONF_FILE="/etc/apache2/sites-available/$DOMAIN.conf"
-LOG_NAME=$(echo "$DOMAIN" | tr '.' '_')
+SUBDOMAIN="$3"
+FQDN="$SUBDOMAIN.$DOMAIN"
+BASE_DIR="/home/$USER/domains/$DOMAIN/$SUBDOMAIN"
+CONF_FILE="/etc/apache2/sites-available/$FQDN.conf"
+LOG_NAME=$(echo "${SUBDOMAIN}_${DOMAIN}" | tr '.' '_')
 
 # Create directory structure
 mkdir -p "$BASE_DIR"
@@ -25,8 +26,8 @@ cat <<EOF | sudo tee "$CONF_FILE" > /dev/null
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
     DocumentRoot $BASE_DIR
-    ServerName $DOMAIN
-    ServerAlias www.$DOMAIN
+    ServerName $FQDN
+    ServerAlias www.$FQDN
 
     <Directory $BASE_DIR>
         Options Indexes FollowSymLinks
@@ -40,7 +41,7 @@ cat <<EOF | sudo tee "$CONF_FILE" > /dev/null
 EOF
 
 # Enable the site and reload Apache
-sudo a2ensite "$DOMAIN.conf"
+sudo a2ensite "$FQDN.conf"
 sudo systemctl reload apache2
 
-echo "✅ Site setup complete for $DOMAIN under user $USER"
+echo "✅ Subdomain setup complete: $FQDN under user $USER"
