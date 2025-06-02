@@ -31,6 +31,6 @@ chmod +x 03-create-subdomain.sh
 ## Create Database User
 ```
 wget https://raw.githubusercontent.com/iescarro/server-bootstrap/main/04-create-mysql-user.sh
-chmod +x 03-create-mysql-user.sh
-./03-create-mysql-user.sh
+chmod +x 04-create-mysql-user.sh
+./04-create-mysql-user.sh
 ```
