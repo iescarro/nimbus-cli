@@ -1,36 +1,18 @@
-# Server Bootstrap
+# 🌩️ Nimbus CLI
 
-## Setup LAMP
-```
-wget https://raw.githubusercontent.com/iescarro/server-bootstrap/main/00-setup-lamp.sh
-chmod +x 00-setup-lamp.sh
-./00-setup-lamp.sh
-```
+A lightweight command-line tool to manage user accounts and domain directories on a Linux server.
 
-## Create User
-```
-wget https://raw.githubusercontent.com/iescarro/server-bootstrap/main/01-create-user.sh
-chmod +x 01-create-user.sh
-./01-create-user.sh
-```
+## ✨ Features
 
-## Create Site
-```
-wget https://raw.githubusercontent.com/iescarro/server-bootstrap/main/02-create-site.sh
-chmod +x 02-create-site.sh
-./02-create-site.sh
-```
+- Create Linux users with associated domain directories
+- Easily set up web directories under `/home/<username>/domains/<domain>/public_html`
+- Simple `hello` command for testing and fun 🎉
 
-## Create Subdomain
-```
-wget https://raw.githubusercontent.com/iescarro/server-bootstrap/main/03-create-subdomain.sh
-chmod +x 03-create-subdomain.sh
-./03-create-subdomain.sh
-```
+---
 
-## Create Database User
-```
-wget https://raw.githubusercontent.com/iescarro/server-bootstrap/main/04-create-mysql-user.sh
-chmod +x 04-create-mysql-user.sh
-./04-create-mysql-user.sh
-```
+## 🚀 Installation
+
+You can install Nimbus CLI directly from GitHub:
+
+```bash
+pip install git+https://github.com/iescarro/nimbus-cli.git
