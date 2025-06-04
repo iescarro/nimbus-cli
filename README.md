@@ -79,6 +79,47 @@ nimbus-cli/
 * Python 3.6+
 * sudo privileges for user creation
 
+## 🛠️ Troubleshooting
+
+### ✅ Issue: nimbus: command not found after installation
+
+This usually happens because the nimbus CLI was installed to a directory not included in your system’s PATH.
+
+### ✅ Solution: Add ~/.local/bin to your PATH
+
+1. Edit your shell profile (choose the one that applies):
+
+For bash:
+
+```bash
+nano ~/.bashrc
+```
+
+2. Add this line at the end:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+3. Apply the change:
+
+```bash
+source ~/.bashrc   # or source ~/.zshrc if you're using zsh
+```
+
+4. Test it:
+
+```bash
+which nimbus
+nimbus hello
+```
+
+### ✅ Expected output:
+
+```bash
+Hello, friend!
+```
+
 ## 📄 License
 MIT License — feel free to use and contribute!
 
