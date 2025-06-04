@@ -40,7 +40,7 @@ This creates:
 * Directory /home/alice/domains/example.com/public_html
 * Correct ownership and permissions
 
-###👋 Say hello
+### 👋 Say hello
 
 ```bash
 nimbus hello
@@ -57,7 +57,7 @@ Output:
 If you're working on the project:
 
 ```bash
-git clone https://github.com/yourusername/nimbus-cli.git
+git clone https://github.com/iescarro/nimbus-cli.git
 cd nimbus-cli
 pip install -e .
 ```
