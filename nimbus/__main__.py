@@ -4,6 +4,42 @@ import os
 import sys
 import subprocess
 
+def say_hello():
+    print("👋 Hello, friend!")
+
+def install_lamp_stack():
+    print("🔄 Updating system...")
+    subprocess.run(['sudo', 'apt', 'update'], check=True)
+    subprocess.run(['sudo', 'apt', 'upgrade', '-y'], check=True)
+
+    print("🌐 Installing Apache, MySQL, PHP, and essential modules...")
+    subprocess.run([
+        'sudo', 'apt', 'install', '-y',
+        'apache2', 'mysql-server', 'php', 'libapache2-mod-php', 'php-mysql', 'unzip'
+    ], check=True)
+
+    print("🧩 Installing PHP 8.3 extensions...")
+    subprocess.run([
+        'sudo', 'apt', 'install', '-y',
+        'php8.3-mbstring', 'php8.3-xml', 'php8.3-curl', 'php8.3-mysql',
+        'php8.3-zip', 'php8.3-gd', 'php8.3-sqlite3', 'sqlite3'
+    ], check=True)
+
+    print("🧬 Installing Git...")
+    subprocess.run(['sudo', 'apt', 'install', '-y', 'git'], check=True)
+
+    print("🐍 Installing Python 3 and pip...")
+    subprocess.run(['sudo', 'apt', 'install', '-y', 'python3', 'python3-pip'], check=True)
+
+    print("🎼 Installing Composer...")
+    subprocess.run(['cd', '/tmp'], shell=True)
+    subprocess.run(['php', '-r', "copy('https://getcomposer.org/installer', 'composer-setup.php');"], check=True)
+    subprocess.run(['php', 'composer-setup.php'], check=True)
+    subprocess.run(['sudo', 'mv', 'composer.phar', '/usr/local/bin/composer'], check=True)
+    subprocess.run(['php', '-r', "unlink('composer-setup.php');"], check=True)
+
+    print("✅ All done! LAMP stack, Python, and tools installed.")
+
 def create_user(username, domain):
     user_home = f"/home/{username}"
     web_dir = os.path.join(user_home, f"domains/{domain}/public_html")
@@ -19,9 +55,6 @@ def create_user(username, domain):
     subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
     print(f"✅ User '{username}' created and web directory '{web_dir}' is ready.")
-
-def say_hello():
-    print("👋 Hello, friend!")
     
 def create_site(username, domain):
     base_dir = f"/home/{username}/domains/{domain}/public_html"
@@ -109,7 +142,9 @@ def main():
 
     command = sys.argv[1]
 
-    if command == "create-user":
+    if command == "install-lamp":
+        install_lamp_stack()
+    elif command == "create-user":
         if len(sys.argv) != 4:
             print("Usage: nimbus.py create-user <username> <domain>")
             sys.exit(1)
