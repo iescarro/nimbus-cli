@@ -20,6 +20,9 @@ def create_user(username, domain):
 
     print(f"✅ User '{username}' created and web directory '{web_dir}' is ready.")
 
+def say_hello():
+    print("👋 Hello, friend!")
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: nimbus.py <command> [args]")
@@ -34,7 +37,8 @@ def main():
         username = sys.argv[2]
         domain = sys.argv[3]
         create_user(username, domain)
-
+    elif command == "hello":
+        say_hello()
     else:
         print(f"❌ Unknown command: {command}")
         sys.exit(1)

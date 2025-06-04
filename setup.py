@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='nimbus-cli',
-    version='0.1',
+    version='0.2',
     packages=['nimbus'],
     entry_points={
         'console_scripts': [
