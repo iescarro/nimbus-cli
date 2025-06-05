@@ -80,8 +80,8 @@ def create_site(username, domain):
         Require all granted
     </Directory>
 
-    ErrorLog ${{{{APACHE_LOG_DIR}}}}/{log_name}_error.log
-    CustomLog ${{{{APACHE_LOG_DIR}}}}/{log_name}_access.log combined
+    ErrorLog ${{APACHE_LOG_DIR}}/{log_name}_error.log
+    CustomLog ${{APACHE_LOG_DIR}}/{log_name}_access.log combined
 </VirtualHost>
 """
 
@@ -142,7 +142,9 @@ def main():
 
     command = sys.argv[1]
 
-    if command == "install-lamp":
+    if command == "hello":
+        say_hello()
+    elif command == "install-lamp":
         install_lamp_stack()
     elif command == "create-user":
         if len(sys.argv) != 4:
@@ -151,8 +153,6 @@ def main():
         username = sys.argv[2]
         domain = sys.argv[3]
         create_user(username, domain)
-    elif command == "hello":
-        say_hello()
     elif command == "create-site":
         if len(sys.argv) != 4:
             print("Usage: nimbus create-site <username> <domain>")
