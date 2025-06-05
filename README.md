@@ -15,6 +15,7 @@ A lightweight command-line tool to manage user accounts and domain directories o
 You can install Nimbus CLI directly from GitHub:
 
 ```bash
+apt install -y python3 python3-pip
 pip install git+https://github.com/iescarro/nimbus-cli.git
 ```
 
