@@ -15,8 +15,13 @@ A lightweight command-line tool to manage user accounts and domain directories o
 You can install Nimbus CLI directly from GitHub:
 
 ```bash
-apt install -y python3 python3-pip
+sudo apt update
+sudo apt install python3-venv python3-pip -y
+python3 -m venv ~/nimbus-env
+source ~/nimbus-env/bin/activate
+
 pip install git+https://github.com/iescarro/nimbus-cli.git
+nimbus --help
 ```
 
 Make sure pip is using Python 3 and your environment is properly set up (e.g., with python3 -m venv if needed).
