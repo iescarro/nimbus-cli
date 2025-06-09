@@ -164,8 +164,8 @@ def create_subdomain(username, domain, subdomain):
         Require all granted
     </Directory>
 
-    ErrorLog ${{{{APACHE_LOG_DIR}}}}/{log_name}_error.log
-    CustomLog ${{{{APACHE_LOG_DIR}}}}/{log_name}_access.log combined
+    ErrorLog ${{APACHE_LOG_DIR}}/{log_name}_error.log
+    CustomLog ${{APACHE_LOG_DIR}}/{log_name}_access.log combined
 </VirtualHost>
 """
 
