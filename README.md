@@ -73,7 +73,7 @@ This will:
 * Enable the site and reload Apache
 * Generate a default index.html inside public_html with a "Nimbus is Ready!" page like this:
 
-<p align="center"> <img src="https://user-images.githubusercontent.com/your-path-to-hosted-image/nimbus-welcome.png" alt="Nimbus is Ready!" width="400"/> </p>
+<p align="center"> <img src="https://raw.githubusercontent.com/iescarro/nimbus-cli/main/art/sample.png?v=1" alt="Nimbus is Ready!" width="400"/> </p>
 
 > 📁 This confirms your LAMP setup is working. You can now upload your site files to the public_html directory.
 
