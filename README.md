@@ -33,6 +33,12 @@ Make sure pip is using Python 3 and your environment is properly set up (e.g., w
 nimbus hello
 ```
 
+Output:
+
+```cpp
+👋 Hello, friend!
+```
+
 ### ✅ Create a new user and web directory
 
 ```bash
@@ -51,11 +57,25 @@ This creates:
 * Directory /home/alice/domains/example.com/public_html
 * Correct ownership and permissions
 
-Output:
+✅ Set Up the Website (Apache VirtualHost)
 
-```cpp
-👋 Hello, friend!
+```bash
+nimbus create-site <username> <domain>
 ```
+
+Example:
+```bash
+nimbus create-site alice example.com
+```
+
+This will:
+* Create an Apache VirtualHost for example.com
+* Enable the site and reload Apache
+* Generate a default index.html inside public_html with a "Nimbus is Ready!" page like this:
+
+<p align="center"> <img src="https://user-images.githubusercontent.com/your-path-to-hosted-image/nimbus-welcome.png" alt="Nimbus is Ready!" width="400"/> </p>
+
+> 📁 This confirms your LAMP setup is working. You can now upload your site files to the public_html directory.
 
 ## 📦 Development
 
