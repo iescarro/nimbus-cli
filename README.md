@@ -21,12 +21,17 @@ python3 -m venv ~/nimbus-env
 source ~/nimbus-env/bin/activate
 
 pip install git+https://github.com/iescarro/nimbus-cli.git
-nimbus --help
 ```
 
 Make sure pip is using Python 3 and your environment is properly set up (e.g., with python3 -m venv if needed).
 
 ## 🛠️ Usage
+
+### 👋 Say hello
+
+```bash
+nimbus hello
+```
 
 ### ✅ Create a new user and web directory
 
@@ -45,12 +50,6 @@ This creates:
 * Linux user alice
 * Directory /home/alice/domains/example.com/public_html
 * Correct ownership and permissions
-
-### 👋 Say hello
-
-```bash
-nimbus hello
-```
 
 Output:
 
