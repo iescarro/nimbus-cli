@@ -55,7 +55,47 @@ def create_user(username, domain):
     subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
     print(f"✅ User '{username}' created and web directory '{web_dir}' is ready.")
-    
+
+def write_nimbus_index(base_dir):
+    index_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Nimbus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #333;
+            text-align: center;
+            padding-top: 100px;
+        }
+        .box {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: inline-block;
+            padding: 40px;
+            max-width: 500px;
+        }
+        h1 {
+            color: #0057ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🚀 Nimbus is Ready!</h1>
+        <p>Your LAMP server is up and running.</p>
+        <p>Place your website files here in <code>public_html</code>.</p>
+    </div>
+</body>
+</html>
+"""
+    index_path = os.path.join(base_dir, "index.html")
+    with open(index_path, "w") as f:
+        f.write(index_html.strip())
+
 def create_site(username, domain):
     base_dir = f"/home/{username}/domains/{domain}/public_html"
     conf_file = f"/etc/apache2/sites-available/{domain}.conf"
@@ -63,6 +103,8 @@ def create_site(username, domain):
 
     # Create directory structure
     os.makedirs(base_dir, exist_ok=True)
+    write_nimbus_index(base_dir)
+
     subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}'], check=True)
     subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}'], check=True)
 
@@ -103,6 +145,8 @@ def create_subdomain(username, domain, subdomain):
 
     # Create directory structure
     os.makedirs(base_dir, exist_ok=True)
+    write_nimbus_index(base_dir)
+
     subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}'], check=True)
     subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}'], check=True)
 
