@@ -156,7 +156,6 @@ def create_subdomain(username, domain, subdomain):
     ServerAdmin webmaster@localhost
     DocumentRoot {base_dir}
     ServerName {fqdn}
-    ServerAlias www.{fqdn}
 
     <Directory {base_dir}>
         Options Indexes FollowSymLinks
