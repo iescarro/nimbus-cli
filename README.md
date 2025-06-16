@@ -77,7 +77,8 @@ This will:
 
 > 📁 This confirms your LAMP setup is working. You can now upload your site files to the public_html directory.
 
-🔄 Upgrade
+## 🔄 Upgrade
+
 To upgrade nimbus-cli to the latest version from GitHub:
 
 ```bash
