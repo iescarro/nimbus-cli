@@ -77,6 +77,19 @@ This will:
 
 > 📁 This confirms your LAMP setup is working. You can now upload your site files to the public_html directory.
 
+🔄 Upgrade
+To upgrade nimbus-cli to the latest version from GitHub:
+
+```bash
+pip install --upgrade --force-reinstall git+https://github.com/iescarro/nimbus-cli.git
+```
+
+This command ensures that:
+* The latest code from the main branch is downloaded
+* The package is reinstalled, even if the version number hasn't changed
+
+> 💡 Tip: To avoid unnecessary reinstalls, always update the version in setup.py when making changes.
+
 ## 📦 Development
 
 If you're working on the project:
