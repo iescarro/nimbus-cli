@@ -40,7 +40,20 @@ def install_lamp_stack():
     subprocess.run(['sudo', 'mv', 'composer.phar', '/usr/local/bin/composer'], check=True)
     subprocess.run(['php', '-r', "unlink('composer-setup.php');"], check=True)
 
-    print("✅ All done! LAMP stack, Python, and tools installed.")
+    print("🔐 Installing Certbot for SSL (Let's Encrypt)...")
+    subprocess.run([
+        'sudo', 'apt', 'install', '-y', 'certbot', 'python3-certbot-apache'
+    ], check=True)
+
+    print("✅ All done! LAMP stack, Python, Certbot, and tools installed.")
+
+def enable_ssl(domain):
+    print(f"🔐 Enabling SSL for {domain} using Certbot...")
+    try:
+        subprocess.run(['sudo', 'certbot', '--apache', '-d', domain], check=True)
+        print(f"✅ SSL enabled for {domain}")
+    except subprocess.CalledProcessError:
+        print(f"❌ Failed to enable SSL for {domain}. Please check your DNS and Apache config.")
 
 def create_user(username, domain):
     user_home = f"/home/{username}"
@@ -218,6 +231,12 @@ def main():
         domain = sys.argv[3]
         subdomain = sys.argv[4]
         create_subdomain(username, domain, subdomain)
+    elif command == "enable-ssl":
+        if len(sys.argv) != 3:
+            print("Usage: nimbus enable-ssl <domain>")
+            sys.exit(1)
+        domain = sys.argv[2]
+        enable_ssl(domain)
     else:
         print(f"❌ Unknown command: {command}")
         sys.exit(1)
