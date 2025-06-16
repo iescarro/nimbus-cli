@@ -1,8 +1,14 @@
 from setuptools import setup
+import os
+
+# Load the version from nimbus/__version__.py
+version = {}
+with open(os.path.join("nimbus", "__version__.py")) as f:
+    exec(f.read(), version)
 
 setup(
     name='nimbus-cli',
-    version='0.7',
+    version=version['__version__'],
     packages=['nimbus'],
     entry_points={
         'console_scripts': [

@@ -4,6 +4,8 @@ import os
 import sys
 import subprocess
 
+from .__version__ import __version__
+
 def say_hello():
     print("👋 Hello, friend!")
 
@@ -182,6 +184,11 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: nimbus.py <command> [args]")
         sys.exit(1)
+
+    # Handle --version or -v globally
+    if sys.argv[1] in ["--version", "-v"]:
+        print(f"nimbus-cli version {__version__}")
+        sys.exit(0)
 
     command = sys.argv[1]
 
