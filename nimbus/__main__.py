@@ -74,27 +74,15 @@ def create_user(username, domain):
 def create_database(db_name, db_user, db_password):
     print(f"📦 Creating MySQL database '{db_name}' and user '{db_user}'...")
 
+    sql = f"""
+    CREATE DATABASE IF NOT EXISTS `{db_name}`;
+    CREATE USER IF NOT EXISTS '{db_user}'@'localhost' IDENTIFIED BY '{db_password}';
+    GRANT ALL PRIVILEGES ON `{db_name}`.* TO '{db_user}'@'localhost';
+    FLUSH PRIVILEGES;
+    """
+
     try:
-        subprocess.run([
-            'sudo', 'mysql', '-e',
-            f"CREATE DATABASE IF NOT EXISTS {db_name};"
-        ], check=True)
-
-        subprocess.run([
-            'sudo', 'mysql', '-e',
-            f"CREATE USER IF NOT EXISTS '{db_user}'@'localhost' IDENTIFIED BY '{db_password}';"
-        ], check=True)
-
-        subprocess.run([
-            'sudo', 'mysql', '-e',
-            f"GRANT ALL PRIVILEGES ON {db_name}.* TO '{db_user}'@'localhost';"
-        ], check=True)
-
-        subprocess.run([
-            'sudo', 'mysql', '-e',
-            "FLUSH PRIVILEGES;"
-        ], check=True)
-
+        subprocess.run(['sudo', 'mysql', '-u', 'root', '-e', sql], check=True)
         print(f"✅ Database '{db_name}' and user '{db_user}' created successfully.")
     except subprocess.CalledProcessError:
         print("❌ Failed to create database or user.")
