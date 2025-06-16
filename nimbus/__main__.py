@@ -71,6 +71,35 @@ def create_user(username, domain):
 
     print(f"✅ User '{username}' created and web directory '{web_dir}' is ready.")
 
+def create_database(db_name, db_user, db_password):
+    print(f"📦 Creating MySQL database '{db_name}' and user '{db_user}'...")
+
+    try:
+        subprocess.run([
+            'sudo', 'mysql', '-e',
+            f"CREATE DATABASE IF NOT EXISTS {db_name};"
+        ], check=True)
+
+        subprocess.run([
+            'sudo', 'mysql', '-e',
+            f"CREATE USER IF NOT EXISTS '{db_user}'@'localhost' IDENTIFIED BY '{db_password}';"
+        ], check=True)
+
+        subprocess.run([
+            'sudo', 'mysql', '-e',
+            f"GRANT ALL PRIVILEGES ON {db_name}.* TO '{db_user}'@'localhost';"
+        ], check=True)
+
+        subprocess.run([
+            'sudo', 'mysql', '-e',
+            "FLUSH PRIVILEGES;"
+        ], check=True)
+
+        print(f"✅ Database '{db_name}' and user '{db_user}' created successfully.")
+    except subprocess.CalledProcessError:
+        print("❌ Failed to create database or user.")
+        sys.exit(1)
+
 def write_nimbus_index(base_dir):
     index_html = """<!DOCTYPE html>
 <html lang="en">
@@ -216,6 +245,14 @@ def main():
         username = sys.argv[2]
         domain = sys.argv[3]
         create_user(username, domain)
+    elif command == "create-database":
+        if len(sys.argv) != 5:
+            print("Usage: nimbus create-database <db_name> <db_user> <db_password>")
+            sys.exit(1)
+        db_name = sys.argv[2]
+        db_user = sys.argv[3]
+        db_password = sys.argv[4]
+        create_database(db_name, db_user, db_password)
     elif command == "create-site":
         if len(sys.argv) != 4:
             print("Usage: nimbus create-site <username> <domain>")
