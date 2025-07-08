@@ -77,6 +77,22 @@ This will:
 
 > 📁 This confirms your LAMP setup is working. You can now upload your site files to the public_html directory.
 
+### ✅ Create Subdomain
+
+```bash
+nimbus create-subdomain alice example.com sub
+```
+
+This command will create the subdomain sub.example.com under the user alice and associate it with the domain example.com.
+
+✅ Request SSL Certificate (Let's Encrypt via Certbot)
+
+After creating the subdomain, you can request a free SSL certificate using Certbot:
+
+```bash
+sudo certbot --apache -d sub.example.com
+```
+
 ## 🔄 Upgrade
 
 To upgrade nimbus-cli to the latest version from GitHub:
