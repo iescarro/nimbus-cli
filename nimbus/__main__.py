@@ -57,26 +57,27 @@ def enable_ssl(domain):
         print(f"❌ Failed to enable SSL for {domain}. Please check your DNS and Apache config.")
 
 def create_user(username, domain):
-    user_home = f"/home/{username}"
-    web_dir = os.path.join(user_home, f"domains/{domain}/public_html")
+    import time
 
-     # Check if user already exists
+    user_home = f"/home/{username}"
+    web_dir = f"/home/{username}/domains/{domain}/public_html"
+
     try:
         pwd.getpwnam(username)
         print(f"⚠️ User '{username}' already exists. Skipping user creation.")
     except KeyError:
-        # User does not exist, safe to add
         subprocess.run(['sudo', 'adduser', '--disabled-password', '--gecos', '', username], check=True)
         print(f"✅ User '{username}' created.")
 
-        # Create web directory
-        os.makedirs(web_dir, exist_ok=True)
+        # Wait a moment to allow system to register the user
+        time.sleep(1)
 
-        # Set permissions
+        # Create the web directory as root
+        subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
         subprocess.run(['sudo', 'chown', '-R', f"{username}:{username}", user_home], check=True)
         subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
-        print(f"✅ User '{username}' created and web directory '{web_dir}' is ready.")
+        print(f"✅ User '{username}' ready. Web directory: {web_dir}")
 
 def create_database(db_name, db_user, db_password):
     print(f"📦 Creating MySQL database '{db_name}' and user '{db_user}'...")
