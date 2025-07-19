@@ -79,7 +79,7 @@ def create_user(username, domain):
         print(f"✅ User '{username}' created.")
 
         # Wait a moment to allow system to register the user
-        if not wait_for_user(username):
+        if not wait_for_user(username, 10):
             print(f"❌ Timeout: user '{username}' was not registered properly.")
             return
 
