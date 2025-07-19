@@ -15,6 +15,11 @@ def install_lamp_stack():
     print("🔄 Updating system...")
     subprocess.run(['sudo', 'apt', 'update'], check=True)
     subprocess.run(['sudo', 'apt', 'upgrade', '-y'], check=True)
+    
+    print("➕ Adding PHP 8.3 repository (ppa:ondrej/php)...")
+    subprocess.run(['sudo', 'apt', 'install', '-y', 'software-properties-common'], check=True)
+    subprocess.run(['sudo', 'add-apt-repository', '-y', 'ppa:ondrej/php'], check=True)
+    subprocess.run(['sudo', 'apt', 'update'], check=True)
 
     print("🌐 Installing Apache, MySQL, PHP, and essential modules...")
     subprocess.run([
