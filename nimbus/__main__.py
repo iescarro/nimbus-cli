@@ -58,12 +58,15 @@ def enable_ssl(domain):
         print(f"❌ Failed to enable SSL for {domain}. Please check your DNS and Apache config.")
 
 def wait_for_user(username, timeout=5):
-    """Wait for user to be registered in the system."""
+    """Wait for user to be registered in the system, printing '.' for progress."""
+    print(f"⏳ Waiting for user '{username}' to be registered:", end='', flush=True)
     for _ in range(timeout * 10):  # check every 0.1s for up to `timeout` seconds
         try:
             pwd.getpwnam(username)
+            print(" ✅")  # user found, finish line
             return True
         except KeyError:
+            print(".", end='', flush=True)
             time.sleep(0.1)
     return False
 
