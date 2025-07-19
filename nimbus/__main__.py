@@ -96,7 +96,7 @@ def create_user(username, domain):
 
         if is_wsl():
             print("⏳ Detected WSL. Sleeping for 3 seconds to finalize user registration...")
-            time.sleep(1)  # Give WSL time to finalize user registration
+            time.sleep(3)  # Give WSL time to finalize user registration
 
         # Create the web directory as root
         subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
