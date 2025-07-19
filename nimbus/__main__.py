@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import pwd
+import time
 
 from .__version__ import __version__
 
@@ -56,9 +57,17 @@ def enable_ssl(domain):
     except subprocess.CalledProcessError:
         print(f"❌ Failed to enable SSL for {domain}. Please check your DNS and Apache config.")
 
-def create_user(username, domain):
-    import time
+def wait_for_user(username, timeout=5):
+    """Wait for user to be registered in the system."""
+    for _ in range(timeout * 10):  # check every 0.1s for up to `timeout` seconds
+        try:
+            pwd.getpwnam(username)
+            return True
+        except KeyError:
+            time.sleep(0.1)
+    return False
 
+def create_user(username, domain):
     user_home = f"/home/{username}"
     web_dir = f"/home/{username}/domains/{domain}/public_html"
 
@@ -70,7 +79,9 @@ def create_user(username, domain):
         print(f"✅ User '{username}' created.")
 
         # Wait a moment to allow system to register the user
-        time.sleep(1)
+        if not wait_for_user(username):
+            print(f"❌ Timeout: user '{username}' was not registered properly.")
+            return
 
         # Create the web directory as root
         subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
