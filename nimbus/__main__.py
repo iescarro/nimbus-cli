@@ -70,6 +70,14 @@ def wait_for_user(username, timeout=5):
             time.sleep(0.1)
     return False
 
+def is_wsl():
+    """Detect if the script is running under Windows Subsystem for Linux."""
+    try:
+        with open("/proc/version", "r") as f:
+            return "Microsoft" in f.read()
+    except FileNotFoundError:
+        return False
+
 def create_user(username, domain):
     user_home = f"/home/{username}"
     web_dir = f"/home/{username}/domains/{domain}/public_html"
@@ -82,9 +90,12 @@ def create_user(username, domain):
         print(f"✅ User '{username}' created.")
 
         # Wait a moment to allow system to register the user
-        if not wait_for_user(username, 20):
+        if not wait_for_user(username):
             print(f"❌ Timeout: user '{username}' was not registered properly.")
             return
+
+        if is_wsl():
+            time.sleep(1)  # Give WSL time to finalize user registration
 
         # Create the web directory as root
         subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
