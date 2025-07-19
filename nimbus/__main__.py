@@ -74,6 +74,8 @@ def create_user(username, domain):
 
         # Create the web directory as root
         subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
+        write_nimbus_index(web_dir)
+
         subprocess.run(['sudo', 'chown', '-R', f"{username}:{username}", user_home], check=True)
         subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
@@ -219,8 +221,7 @@ def create_subdomain(username, domain, subdomain):
     print(f"✅ Subdomain setup complete: {fqdn} under user {username}")
 
 def print_usage():
-    print("""
-📦 Nimbus CLI — LAMP site manager
+    print("""📦 Nimbus CLI — LAMP site manager
 Usage:
   nimbus <command> [options]
 
