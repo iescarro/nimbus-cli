@@ -3,6 +3,7 @@
 import os
 import sys
 import subprocess
+import pwd
 
 from .__version__ import __version__
 
