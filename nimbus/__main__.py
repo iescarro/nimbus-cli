@@ -69,14 +69,14 @@ def create_user(username, domain):
         subprocess.run(['sudo', 'adduser', '--disabled-password', '--gecos', '', username], check=True)
         print(f"✅ User '{username}' created.")
 
-    # Create web directory
-    os.makedirs(web_dir, exist_ok=True)
+        # Create web directory
+        os.makedirs(web_dir, exist_ok=True)
 
-    # Set permissions
-    subprocess.run(['sudo', 'chown', '-R', f"{username}:{username}", user_home], check=True)
-    subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
+        # Set permissions
+        subprocess.run(['sudo', 'chown', '-R', f"{username}:{username}", user_home], check=True)
+        subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
-    print(f"✅ User '{username}' created and web directory '{web_dir}' is ready.")
+        print(f"✅ User '{username}' created and web directory '{web_dir}' is ready.")
 
 def create_database(db_name, db_user, db_password):
     print(f"📦 Creating MySQL database '{db_name}' and user '{db_user}'...")
