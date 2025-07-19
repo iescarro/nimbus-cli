@@ -57,6 +57,16 @@ This creates:
 * Directory /home/alice/domains/example.com/public_html
 * Correct ownership and permissions
 
+ℹ️ Note:
+The user is created with a disabled password by default.
+To allow su - alice or terminal login, manually set a password:
+
+```bash
+sudo passwd alice
+```
+
+Then follow the prompt to enter a new password for the user.
+
 ✅ Set Up the Website (Apache VirtualHost)
 
 ```bash
