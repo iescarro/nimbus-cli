@@ -73,8 +73,8 @@ def wait_for_user(username, timeout=5):
 def is_wsl():
     """Detect if the script is running under Windows Subsystem for Linux."""
     try:
-        with open("/proc/version", "r") as f:
-            return "Microsoft" in f.read()
+        with open("/proc/sys/kernel/osrelease", "r") as f:
+            return "microsoft" in f.read().lower()
     except FileNotFoundError:
         return False
 
@@ -95,7 +95,8 @@ def create_user(username, domain):
             return
 
         if is_wsl():
-            time.sleep(3)  # Give WSL time to finalize user registration
+            print("⏳ Detected WSL. Sleeping for 3 seconds to finalize user registration...")
+            time.sleep(1)  # Give WSL time to finalize user registration
 
         # Create the web directory as root
         subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
