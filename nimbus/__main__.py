@@ -59,8 +59,14 @@ def create_user(username, domain):
     user_home = f"/home/{username}"
     web_dir = os.path.join(user_home, f"domains/{domain}/public_html")
 
-    # Create user
-    subprocess.run(['sudo', 'adduser', '--disabled-password', '--gecos', '', username], check=True)
+     # Check if user already exists
+    try:
+        pwd.getpwnam(username)
+        print(f"⚠️ User '{username}' already exists. Skipping user creation.")
+    except KeyError:
+        # User does not exist, safe to add
+        subprocess.run(['sudo', 'adduser', '--disabled-password', '--gecos', '', username], check=True)
+        print(f"✅ User '{username}' created.")
 
     # Create web directory
     os.makedirs(web_dir, exist_ok=True)
