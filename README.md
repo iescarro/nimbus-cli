@@ -39,6 +39,29 @@ Output:
 👋 Hello, friend!
 ```
 
+### 🚀 Install LAMP Stack
+
+To install the LAMP (Linux, Apache, MySQL/MariaDB, PHP) stack using Nimbus:
+
+```bash
+nimbus install-lamp
+```
+
+This command sets up the essential components for running PHP-based web applications on your system.
+
+**⚠️ Node.js Note**
+
+If you are installing Node.js as part of your development stack and encounter package conflicts (common on Ubuntu systems with pre-installed Node.js), you must remove the conflicting packages before running nimbus install-lamp.
+
+**🛠️ Fix Node.js installation conflict**
+
+```bash
+sudo apt remove -y nodejs libnode72
+sudo apt autoremove -y
+```
+
+This ensures that a clean version of Node.js (LTS) and npm can be installed from the official NodeSource repository without conflicts.
+
 ### ✅ Create a new user and web directory
 
 ```bash
