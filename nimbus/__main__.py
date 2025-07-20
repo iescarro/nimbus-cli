@@ -48,7 +48,7 @@ def install_lamp_stack():
     subprocess.run(['php', '-r', "unlink('composer-setup.php');"], check=True)
 
     print("📦 Installing Node.js (LTS) and npm...")
-    subprocess.run(['curl', '-fsSL', 'https://deb.nodesource.com/setup_18.x', '|', 'sudo', '-E', 'bash', '-'], shell=True)
+    subprocess.run('curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -', shell=True, check=True)
     subprocess.run(['sudo', 'apt', 'install', '-y', 'nodejs'], check=True)
 
     print("🔐 Installing Certbot for SSL (Let's Encrypt)...")
