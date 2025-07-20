@@ -77,7 +77,7 @@ nimbus create-user alice example.com
 This creates:
 
 * Linux user alice
-* Directory /home/alice/domains/example.com/public_html
+* Directory `/home/alice/domains/example.com/public_html`
 * Correct ownership and permissions
 
 > ℹ️ Note:
