@@ -41,30 +41,22 @@ def open_app(environment='default', app_name='default'):
 def init():
     config = {
         "environments": {
-            "app1": {
+            "default": {
                 "host": "your-host.com",
                 "ssh": {
                     "port": 22,
                     "user": "your-ssh-user",
                     "ssh_key": "~/.ssh/id_rsa"
                 },
-                "databases": {
-                    "your-db": {
-                        "user": "your-db-user",
-                        "password": "your-db-password",
-                        "name": "your-db-name"
+                "apps": {
+                    "default": {
+                        "name": "default-app",
+                        "subdomain": "default.your-host.com",
+                        "github": ""
                     }
-                }
-            },
-            "app2": {
-                "host": "your-host2.com",
-                "ssh": {
-                    "port": 22,
-                    "user": "your-ssh-user",
-                    "ssh_key": "~/.ssh/id_rsa"
                 },
                 "databases": {
-                    "your-db": {
+                    "default": {
                         "user": "your-db-user",
                         "password": "your-db-password",
                         "name": "your-db-name"
