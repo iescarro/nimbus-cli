@@ -45,6 +45,11 @@ def main():
         db_user = sys.argv[3]
         db_password = sys.argv[4]
         DB.create_database(db_name, db_user, db_password)
+    elif command == "db:migrate":
+        if len(sys.argv) != 4:
+            print("Usage: nimbus db:migrate <source_app:db> <target_app:db>")
+            sys.exit(1)
+        DB.migrate(sys.argv[2], sys.argv[3])
     elif command == "create-site":
         if len(sys.argv) != 4:
             print("Usage: nimbus create-site <username> <domain>")

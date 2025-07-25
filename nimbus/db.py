@@ -44,7 +44,7 @@ class DB:
         output = stdout.read().decode()
         error = stderr.read().decode()
         if error:
-            print(f"⚠️  Error:\n{error}")
+            print(f"⚠️ Error: {error}")
         return output
 
     def create_backup(self, client, db_user, db_password, db_name):
@@ -64,40 +64,48 @@ class DB:
             scp.put(local_path, remote_path)
 
     def restore_backup(self, client, db_user, db_password, db_name, zip_filename, sql_filename):
-        print("🛠️  Restoring database on destination server...")
+        print("🛠️ Restoring database on destination server...")
         unzip_cmd = f"unzip -o {zip_filename}"
         restore_cmd = f"mysql -u {db_user} -p'{db_password}' {db_name} < {sql_filename}"
         self.run_ssh_command(client, unzip_cmd)
         self.run_ssh_command(client, restore_cmd)
 
     @staticmethod
-    def migrate():
-        with open("db.yml", "r") as f:
-            config = yaml.safe_load(f)["db"]
+    def migrate(source, target):
+        with open("nimbus.yaml", "r") as f:
+            config = yaml.safe_load(f)["environments"]  
+               
+        # Parse source and target
+        src_app, src_db_name = source.split(':')
+        dst_app, dest_db_name = target.split(':')
+        
+        # Get configurations
+        src = config[src_app]
+        dest = config[dst_app]
 
-        src = config["source"]
-        dest = config["destination"]
-        zip_filename = f"{src['db_name']}.zip"
-        sql_filename = f"{src['db_name']}.sql"
+        src_db = src["databases"][src_db_name]
+        zip_filename = f"{src_db['name']}.zip"
+        sql_filename = f"{src_db['name']}.sql"
 
         db = DB()
 
         # Step 1: Connect to source server
         print("🔌 Connecting to source server...")
-        src_client = db.ssh_connect(src["ssh_key"], src["host"], src["port"], src["user"])
-        db.create_backup(src_client, src["db_user"], src["db_password"], src["db_name"])
+        src_client = db.ssh_connect(src["ssh"]["ssh_key"], src["host"], src["ssh"]["port"], src["ssh"]["user"])
+        db.create_backup(src_client, src_db["user"], src_db["password"], src_db["name"])
 
         # Step 2: Download to local
-        db.transfer_file_from_source(src_client, f"{src['db_name']}.zip", f"./{zip_filename}")
+        db.transfer_file_from_source(src_client, f"{src_db['name']}.zip", f"./{zip_filename}")
         src_client.close()
 
         # # Step 3: Upload to destination
         print("🔌 Connecting to destination server...")
-        dest_client = db.ssh_connect(dest["ssh_key"], dest["host"], dest["port"], dest["user"])
+        dest_client = db.ssh_connect(dest["ssh"]["ssh_key"], dest["host"], dest["ssh"]["port"], dest["ssh"]["user"])
         db.transfer_file_to_dest(dest_client, f"./{zip_filename}", f"./{zip_filename}")
 
         # # Step 4: Restore
-        db.restore_backup(dest_client, dest["db_user"], dest["db_password"], dest["db_name"], zip_filename, sql_filename)
+        dest_db = dest["databases"][dest_db_name]
+        db.restore_backup(dest_client, dest_db["user"], dest_db["password"], dest_db["name"], zip_filename, sql_filename)
         dest_client.close()
 
         print("✅ Backup and restore complete.")
