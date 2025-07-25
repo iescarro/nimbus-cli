@@ -20,6 +20,7 @@ sudo apt install python3-venv python3-pip -y
 python3 -m venv ~/nimbus-env
 source ~/nimbus-env/bin/activate
 
+pip install pyyaml
 pip install git+https://github.com/iescarro/nimbus-cli.git
 ```
 
