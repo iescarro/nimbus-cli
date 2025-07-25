@@ -21,7 +21,7 @@ python3 -m venv ~/nimbus-env
 source ~/nimbus-env/bin/activate
 
 # Install with all dependencies in one command
-pip install git+https://github.com/iescarro/nimbus-cli.git pyyaml paramiko scp
+pip install pyyaml paramiko scp git+https://github.com/iescarro/nimbus-cli.git
 ```
 
 Make sure pip is using Python 3 and your environment is properly set up (e.g., with python3 -m venv if needed).
