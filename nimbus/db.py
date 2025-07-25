@@ -70,36 +70,34 @@ class DB:
         self.run_ssh_command(client, unzip_cmd)
         self.run_ssh_command(client, restore_cmd)
 
-def main():
-    with open("db.yml", "r") as f:
-        config = yaml.safe_load(f)["db"]
+    @staticmethod
+    def migrate():
+        with open("db.yml", "r") as f:
+            config = yaml.safe_load(f)["db"]
 
-    src = config["source"]
-    dest = config["destination"]
-    zip_filename = f"{src['db_name']}.zip"
-    sql_filename = f"{src['db_name']}.sql"
+        src = config["source"]
+        dest = config["destination"]
+        zip_filename = f"{src['db_name']}.zip"
+        sql_filename = f"{src['db_name']}.sql"
 
-    db = DB()
+        db = DB()
 
-    # Step 1: Connect to source server
-    print("🔌 Connecting to source server...")
-    src_client = db.ssh_connect(src["ssh_key"], src["host"], src["port"], src["user"])
-    db.create_backup(src_client, src["db_user"], src["db_password"], src["db_name"])
+        # Step 1: Connect to source server
+        print("🔌 Connecting to source server...")
+        src_client = db.ssh_connect(src["ssh_key"], src["host"], src["port"], src["user"])
+        db.create_backup(src_client, src["db_user"], src["db_password"], src["db_name"])
 
-    # Step 2: Download to local
-    db.transfer_file_from_source(src_client, f"{src['db_name']}.zip", f"./{zip_filename}")
-    src_client.close()
+        # Step 2: Download to local
+        db.transfer_file_from_source(src_client, f"{src['db_name']}.zip", f"./{zip_filename}")
+        src_client.close()
 
-    # # Step 3: Upload to destination
-    print("🔌 Connecting to destination server...")
-    dest_client = db.ssh_connect(dest["ssh_key"], dest["host"], dest["port"], dest["user"])
-    db.transfer_file_to_dest(dest_client, f"./{zip_filename}", f"./{zip_filename}")
+        # # Step 3: Upload to destination
+        print("🔌 Connecting to destination server...")
+        dest_client = db.ssh_connect(dest["ssh_key"], dest["host"], dest["port"], dest["user"])
+        db.transfer_file_to_dest(dest_client, f"./{zip_filename}", f"./{zip_filename}")
 
-    # # Step 4: Restore
-    db.restore_backup(dest_client, dest["db_user"], dest["db_password"], dest["db_name"], zip_filename, sql_filename)
-    dest_client.close()
+        # # Step 4: Restore
+        db.restore_backup(dest_client, dest["db_user"], dest["db_password"], dest["db_name"], zip_filename, sql_filename)
+        dest_client.close()
 
-    print("✅ Backup and restore complete.")
-
-if __name__ == "__main__":
-    main()
+        print("✅ Backup and restore complete.")

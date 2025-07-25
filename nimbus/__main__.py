@@ -65,6 +65,11 @@ def main():
             sys.exit(1)
         domain = sys.argv[2]
         enable_ssl(domain)
+    elif command == "db:migrate":
+        if len(sys.argv) != 2:
+            print("Usage: nimbus db:migrate")
+            sys.exit(1)
+        DB.migrate()
     else:
         print(f"❌ Unknown command: {command}")
         sys.exit(1)
