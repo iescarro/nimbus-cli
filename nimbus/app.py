@@ -1,4 +1,49 @@
 import subprocess
+import yaml
+from pathlib import Path
+
+def init():
+    config = {
+        "environments": {
+            "app1": {
+                "host": "your-host.com",
+                "ssh": {
+                    "port": 22,
+                    "user": "your-ssh-user",
+                    "ssh_key": "~/.ssh/id_rsa"
+                },
+                "databases": {
+                    "your-db": {
+                        "user": "your-db-user",
+                        "password": "your-db-password",
+                        "name": "your-db-name"
+                    }
+                }
+            },
+            "app2": {
+                "host": "your-host2.com",
+                "ssh": {
+                    "port": 22,
+                    "user": "your-ssh-user",
+                    "ssh_key": "~/.ssh/id_rsa"
+                },
+                "databases": {
+                    "your-db": {
+                        "user": "your-db-user",
+                        "password": "your-db-password",
+                        "name": "your-db-name"
+                    }
+                }
+            }
+        }
+    }
+
+    # Create the file
+    config_path = Path("nimbus.yaml")
+    with open(config_path, 'w') as f:
+        yaml.dump(config, f, sort_keys=False, default_flow_style=False)
+    
+    print(f"✅ Config file created at: {config_path.absolute()}")
 
 def install_lamp_stack():
     print("🔄 Updating system...")

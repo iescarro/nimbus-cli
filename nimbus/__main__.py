@@ -6,10 +6,9 @@ import subprocess
 
 from .__version__ import __version__
 
-from .nimbus import say_hello
-from .nimbus import print_usage
+from .nimbus import say_hello, print_usage
+from .app import init, install_lamp_stack
 from .db import DB
-from .app import install_lamp_stack
 from .site import enable_ssl, create_site, create_subdomain
 from .user import create_user
 
@@ -27,6 +26,8 @@ def main():
 
     if command == "hello":
         say_hello()
+    elif command == "init":
+        init()
     elif command == "install-lamp":
         install_lamp_stack()
     elif command == "create-user":
