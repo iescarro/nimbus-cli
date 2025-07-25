@@ -20,7 +20,8 @@ sudo apt install python3-venv python3-pip -y
 python3 -m venv ~/nimbus-env
 source ~/nimbus-env/bin/activate
 
-pip install git+https://github.com/iescarro/nimbus-cli.git
+# Install with all dependencies in one command
+pip install git+https://github.com/iescarro/nimbus-cli.git pyyaml paramiko scp
 ```
 
 Make sure pip is using Python 3 and your environment is properly set up (e.g., with python3 -m venv if needed).
