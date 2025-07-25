@@ -7,7 +7,7 @@ import subprocess
 from .__version__ import __version__
 
 from .nimbus import say_hello, print_usage
-from .app import init, install_lamp_stack
+from .app import init, install_lamp_stack, open_app
 from .db import DB
 from .site import enable_ssl, create_site, create_subdomain
 from .user import create_user
@@ -28,6 +28,15 @@ def main():
         say_hello()
     elif command == "init":
         init()
+    elif command == "open":
+        if len(sys.argv) == 2:
+            open_app()
+        elif len(sys.argv) == 3:
+            env, app = sys.argv[2].split(':')
+            open_app(environment=env, app_name=app)
+        else:
+            print("Usage: nimbus open [app]")
+            sys.exit(1)
     elif command == "install-lamp":
         install_lamp_stack()
     elif command == "create-user":

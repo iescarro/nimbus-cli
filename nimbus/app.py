@@ -2,6 +2,42 @@ import subprocess
 import yaml
 from pathlib import Path
 
+import webbrowser
+
+def open_app(environment='default', app_name='default'):
+    """Open the default app's URL in the default web browser"""
+    config_path = Path("nimbus.yaml")
+    
+    try:
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        if environment not in config['environments']:
+            available = ", ".join(config['environments'].keys())
+            print(f"❌ Environment '{environment}' not found. Available: {available}")
+            return False
+            
+        env_config = config['environments'][environment]
+        
+        if 'apps' not in env_config or app_name not in env_config['apps']:
+            available = ", ".join(env_config['apps'].keys()) if 'apps' in env_config else "none"
+            print(f"❌ App '{app_name}' not found in '{environment}'. Available: {available}")
+            return False
+            
+        app_config = env_config['apps'][app_name]
+        app_url = f"https://{app_config['name']}"
+        
+        print(f"🌐 Opening {app_url} in your browser...")
+        webbrowser.open_new_tab(app_url)
+        return True        
+    except FileNotFoundError:
+        print(f"❌ Config file not found at: {config_path.absolute()}")
+    except KeyError as e:
+        print(f"❌ Missing required config key: {e}")
+    except Exception as e:
+        print(f"❌ Unexpected error: {str(e)}")    
+    return False
+
 def init():
     config = {
         "environments": {
