@@ -4,6 +4,7 @@ import paramiko
 from scp import SCPClient
 from os.path import expanduser
 from paramiko import SSHClient, AutoAddPolicy
+from .ssh import ssh_connect, run_ssh_command
 
 import subprocess
 import sys
@@ -27,31 +28,11 @@ class DB:
             print("❌ Failed to create database or user.")
             sys.exit(1)
 
-    def ssh_connect(self, key_path, host, port, user):
-        # print(f"$ ssh -i {key_path} -p {port} {user}@{host}")
-        client = SSHClient()
-        client.set_missing_host_key_policy(AutoAddPolicy())
-        client.connect(
-            hostname=host,
-            port=port,
-            username=user,
-            key_filename=expanduser(key_path)
-        )
-        return client
-
-    def run_ssh_command(self, client, command):
-        stdin, stdout, stderr = client.exec_command(command)
-        output = stdout.read().decode()
-        error = stderr.read().decode()
-        if error:
-            print(f"⚠️ Error: {error}")
-        return output
-
     def create_backup(self, client, db_user, db_password, db_name):
         print("📦 Creating MySQL dump and zipping it...")
         dump_cmd = f"mysqldump -u {db_user} -p'{db_password}' {db_name} > {db_name}.sql && zip {db_name}.zip {db_name}.sql"
         # print(f"Running command: {dump_cmd}")
-        return self.run_ssh_command(client, dump_cmd)
+        return run_ssh_command(client, dump_cmd)
 
     def transfer_file_from_source(self, source_client, remote_path, local_path):
         print("📥 Downloading backup file to local machine...")
@@ -67,8 +48,8 @@ class DB:
         print("🛠️ Restoring database on destination server...")
         unzip_cmd = f"unzip -o {zip_filename}"
         restore_cmd = f"mysql -u {db_user} -p'{db_password}' {db_name} < {sql_filename}"
-        self.run_ssh_command(client, unzip_cmd)
-        self.run_ssh_command(client, restore_cmd)
+        run_ssh_command(client, unzip_cmd)
+        run_ssh_command(client, restore_cmd)
 
     @staticmethod
     def migrate(source, target):
@@ -91,7 +72,7 @@ class DB:
 
         # Step 1: Connect to source server
         print("🔌 Connecting to source server...")
-        src_client = db.ssh_connect(src["ssh"]["ssh_key"], src["host"], src["ssh"]["port"], src["ssh"]["user"])
+        src_client = ssh_connect(src["ssh"]["ssh_key"], src["host"], src["ssh"]["port"], src["ssh"]["user"])
         db.create_backup(src_client, src_db["user"], src_db["password"], src_db["name"])
 
         # Step 2: Download to local
@@ -100,7 +81,7 @@ class DB:
 
         # # Step 3: Upload to destination
         print("🔌 Connecting to destination server...")
-        dest_client = db.ssh_connect(dest["ssh"]["ssh_key"], dest["host"], dest["ssh"]["port"], dest["ssh"]["user"])
+        dest_client = ssh_connect(dest["ssh"]["ssh_key"], dest["host"], dest["ssh"]["port"], dest["ssh"]["user"])
         db.transfer_file_to_dest(dest_client, f"./{zip_filename}", f"./{zip_filename}")
 
         # # Step 4: Restore
