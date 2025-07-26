@@ -52,8 +52,8 @@ def create_subdomain(username, domain, subdomain):
     os.makedirs(base_dir, exist_ok=True)
     write_nimbus_index(base_dir)
 
-    subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}'], check=True)
-    subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}'], check=True)
+    subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
+    subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
 
     # Apache config content
     apache_config = f"""
