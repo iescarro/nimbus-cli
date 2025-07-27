@@ -52,7 +52,14 @@ def init():
                     "default": {
                         "name": "default-app",
                         "subdomain": "default.your-host.com",
-                        "github": ""
+                        "github": "https://your-token@github.com/your-name/your-repo.git",
+                        "branch": "develop",
+                        "tasks": [
+                            "cd domains/your-domain",
+                            "git pull origin develop",
+                            "composer install",
+                            "php index.php migrate"
+                        ],
                     }
                 },
                 "databases": {
