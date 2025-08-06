@@ -110,20 +110,20 @@ def init():
     config = {
         "environments": {
             "default": {
-                "host": "your-host.com",
+                "host": "your_host.com",
                 "ssh": {
                     "port": 22,
-                    "user": "your-ssh-user",
+                    "user": "your_ssh_user",
                     "ssh_key": "~/.ssh/id_rsa"
                 },
                 "apps": {
                     "default": {
-                        "name": "default-app",
-                        "subdomain": "default.your-host.com",
-                        "github": "https://your-token@github.com/your-name/your-repo.git",
+                        "name": "your_app",
+                        "subdomain": "your_app.your_host.com",
+                        "github": "your_token@github.com/your_name/your_repo.git",
                         "branch": "develop",
                         "tasks": [
-                            "cd domains/your-domain",
+                            "cd domains/your_domain/your_app",
                             "git pull origin develop",
                             "composer install",
                             "php index.php migrate"
@@ -132,9 +132,9 @@ def init():
                 },
                 "databases": {
                     "default": {
-                        "user": "your-db-user",
-                        "password": "your-db-password",
-                        "name": "your-db-name"
+                        "user": "your_db_user",
+                        "password": "your_db_password",
+                        "name": "your_db_name"
                     }
                 }
             }
