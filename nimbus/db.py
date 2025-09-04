@@ -90,3 +90,30 @@ class DB:
         dest_client.close()
 
         print("✅ Backup and restore complete.")
+
+    @staticmethod
+    def backup(source):
+        with open("nimbus.yaml", "r") as f:
+            config = yaml.safe_load(f)["environments"]  
+               
+        # Parse source and target
+        src_app, src_db_name = source.split(':')
+        
+        # Get configurations
+        src = config[src_app]
+
+        src_db = src["databases"][src_db_name]
+        zip_filename = f"{src_db['name']}.zip"
+
+        db = DB()
+
+        # Step 1: Connect to source server
+        print("🔌 Connecting to source server...")
+        src_client = ssh_connect(src["ssh"]["ssh_key"], src["host"], src["ssh"]["port"], src["ssh"]["user"])
+        db.create_backup(src_client, src_db["user"], src_db["password"], src_db["name"])
+
+        # Step 2: Download to local
+        db.transfer_file_from_source(src_client, f"{src_db['name']}.zip", f"./{zip_filename}")
+        src_client.close()
+
+        print("✅ Backup complete.")

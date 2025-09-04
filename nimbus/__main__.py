@@ -71,6 +71,14 @@ def main():
             print("Usage: nimbus db:migrate <source_app:db> <target_app:db>")
             sys.exit(1)
         DB.migrate(sys.argv[2], sys.argv[3])
+    elif command == "db:backup":
+        if len(sys.argv) < 2:
+            print("Usage: nimbus db:backup <source_app:db>")
+            sys.exit(1)
+        source = sys.argv[2] if len(sys.argv) > 2 else "default:default"
+        DB.backup(source)
+
+    # Site management commands
     elif command == "create-site":
         if len(sys.argv) != 4:
             print("Usage: nimbus create-site <username> <domain>")
@@ -92,11 +100,11 @@ def main():
             sys.exit(1)
         domain = sys.argv[2]
         enable_ssl(domain)
-    elif command == "db:migrate":
-        if len(sys.argv) != 2:
-            print("Usage: nimbus db:migrate")
-            sys.exit(1)
-        DB.migrate()
+    # elif command == "db:migrate":
+    #     if len(sys.argv) != 2:
+    #         print("Usage: nimbus db:migrate")
+    #         sys.exit(1)
+    #     DB.migrate()
     else:
         print(f"❌ Unknown command: {command}")
         sys.exit(1)
