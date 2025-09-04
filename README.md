@@ -153,6 +153,12 @@ pip install -e .
 
 This installs it in editable mode, so changes take effect immediately.
 
+or 
+
+```bash
+python -m nimbus <command> <option...>
+```
+
 ## 🧪 Example Project Structure
 
 ```arduino
