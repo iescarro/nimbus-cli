@@ -49,6 +49,8 @@ def main():
         else:
             print("Usage: nimbus deploy [env:app|app]")
             sys.exit(1)
+
+    # System setup commands
     elif command == "install-lamp":
         install_lamp_stack()
     elif command == "create-user":
@@ -58,6 +60,8 @@ def main():
         username = sys.argv[2]
         domain = sys.argv[3]
         create_user(username, domain)
+
+    # Database management commands
     elif command == "create-database":
         if len(sys.argv) != 5:
             print("Usage: nimbus create-database <db_name> <db_user> <db_password>")
