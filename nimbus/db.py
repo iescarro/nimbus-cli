@@ -148,4 +148,4 @@ class DB:
         db.restore_backup(dest_client, dest_db["user"], dest_db["password"], dest_db["name"], zip_filename, sql_filename)
         dest_client.close()
 
-        print("✅ Backup and restore complete.")
+        print("✅ Restore completed successfully.")
