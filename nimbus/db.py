@@ -117,3 +117,35 @@ class DB:
         src_client.close()
 
         print("✅ Backup complete.")
+
+    @staticmethod
+    def restore(target, dest_db_filename = None):
+        with open("nimbus.yaml", "r") as f:
+            config = yaml.safe_load(f)["environments"]  
+               
+        # Parse source and target
+        dst_app, dest_db_name = target.split(':')
+        
+        # Get configurations
+        dest = config[dst_app]
+        dest_db = dest["databases"][dest_db_name]
+
+        # Use dest_db_filename if provided, otherwise use dest_db['name']
+        base_filename = dest_db_filename if dest_db_filename is not None else dest_db['name']
+
+        zip_filename = f"{base_filename}.zip"
+        sql_filename = f"{base_filename}.sql"
+
+        db = DB()
+
+        # # Step 3: Upload to destination
+        print("🔌 Connecting to destination server...")
+        dest_client = ssh_connect(dest["ssh"]["ssh_key"], dest["host"], dest["ssh"]["port"], dest["ssh"]["user"])
+        db.transfer_file_to_dest(dest_client, f"./{zip_filename}", f"./{zip_filename}")
+
+        # # Step 4: Restore
+        dest_db = dest["databases"][dest_db_name]
+        db.restore_backup(dest_client, dest_db["user"], dest_db["password"], dest_db["name"], zip_filename, sql_filename)
+        dest_client.close()
+
+        print("✅ Backup and restore complete.")
