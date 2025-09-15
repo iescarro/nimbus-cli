@@ -158,10 +158,10 @@ def install_lamp_stack():
     subprocess.run(['sudo', 'add-apt-repository', '-y', 'ppa:ondrej/php'], check=True)
     subprocess.run(['sudo', 'apt', 'update'], check=True)
 
-    print("🌐 Installing Apache, MySQL, PHP, and essential modules...")
+    print("🌐 Installing Apache, MySQL, PHP 8.3, and essential modules...")
     subprocess.run([
         'sudo', 'apt', 'install', '-y',
-        'apache2', 'mysql-server', 'php', 'libapache2-mod-php', 'php-mysql', 'unzip'
+        'apache2', 'mysql-server', 'php8.3', 'libapache2-mod-php8.3', 'php8.3-mysql', 'unzip'  # Changed to php8.3 specific
     ], check=True)
 
     print("🧩 Installing PHP 8.3 extensions...")
@@ -170,6 +170,14 @@ def install_lamp_stack():
         'php8.3-mbstring', 'php8.3-xml', 'php8.3-curl', 'php8.3-mysql',
         'php8.3-zip', 'php8.3-gd', 'php8.3-sqlite3', 'sqlite3'
     ], check=True)
+
+    # Set PHP 8.3 as the default CLI version
+    print("⚙️ Setting PHP 8.3 as default...")
+    subprocess.run(['sudo', 'update-alternatives', '--set', 'php', '/usr/bin/php8.3'], check=True)
+    
+    # Enable PHP 8.3 for Apache
+    print("🔧 Enabling PHP 8.3 in Apache...")
+    subprocess.run(['sudo', 'a2enmod', 'php8.3'], check=True)
 
     print("🧬 Installing Git...")
     subprocess.run(['sudo', 'apt', 'install', '-y', 'git'], check=True)
@@ -193,4 +201,8 @@ def install_lamp_stack():
         'sudo', 'apt', 'install', '-y', 'certbot', 'python3-certbot-apache'
     ], check=True)
 
-    print("✅ All done! LAMP stack, Python, Certbot, and tools installed.")
+    # Restart Apache to apply PHP changes
+    print("🔄 Restarting Apache...")
+    subprocess.run(['sudo', 'systemctl', 'restart', 'apache2'], check=True)
+
+    print("✅ All done! LAMP stack with PHP 8.3, Python, Certbot, and tools installed.")
