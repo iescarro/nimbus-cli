@@ -81,6 +81,13 @@ def main():
             sys.exit(1)
         source = sys.argv[2] if len(sys.argv) > 2 else "default:default"
         DB.backup(source)
+    elif command == "db:restore":
+        if len(sys.argv) < 2:
+            print("Usage: nimbus db:restore <destination_app:db> <db_name>")
+            sys.exit(1)
+        destination = sys.argv[2] if len(sys.argv) > 2 else "default:default"
+        db_name = sys.argv[3] if len(sys.argv) > 3 else None
+        DB.restore(destination, db_name)
 
     # Site management commands
     elif command == "create-site":
