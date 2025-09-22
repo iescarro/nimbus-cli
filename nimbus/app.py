@@ -161,7 +161,9 @@ def install_lamp_stack():
     print("🌐 Installing Apache, MySQL, PHP 8.3, and essential modules...")
     subprocess.run([
         'sudo', 'apt', 'install', '-y',
-        'apache2', 'mysql-server', 'php8.3', 'libapache2-mod-php8.3', 'php8.3-mysql', 'unzip'  # Changed to php8.3 specific
+        'apache2', 'mysql-server',
+        'php8.3', 'libapache2-mod-php8.3', 'php8.3-mysql',
+        'zip', 'unzip'  # ✅ Added here
     ], check=True)
 
     print("🧩 Installing PHP 8.3 extensions...")
