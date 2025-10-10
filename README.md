@@ -215,6 +215,13 @@ nimbus hello
 Hello, friend!
 ```
 
+## RaspiOS
+
+```bash
+pip install --upgrade pip setuptools wheel
+pip install cryptography==46.0.2
+```
+
 ## 📄 License
 MIT License — feel free to use and contribute!
 
