@@ -16,7 +16,7 @@ You can install Nimbus CLI directly from GitHub:
 
 ```bash
 sudo apt update
-sudo apt install python3-venv python3-pip -y
+sudo apt install python3 python3-venv python3-pip -y
 python3 -m venv ~/nimbus-env
 source ~/nimbus-env/bin/activate
 
