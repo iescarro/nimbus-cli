@@ -31,7 +31,7 @@ class DB:
     def create_backup(self, client, db_user, db_password, db_name):
         print("📦 Creating MySQL dump and zipping it...")
         dump_cmd = f"mysqldump -u {db_user} -p'{db_password}' {db_name} > {db_name}.sql && zip {db_name}.zip {db_name}.sql"
-        # print(f"Running command: {dump_cmd}")
+        print(f"Running command: {dump_cmd}")
         return run_ssh_command(client, dump_cmd)
 
     def transfer_file_from_source(self, source_client, remote_path, local_path):
