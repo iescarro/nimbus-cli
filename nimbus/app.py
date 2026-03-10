@@ -150,17 +150,17 @@ def init():
 
 def install_lamp_stack():
     print("🔄 Updating system...")
-    subprocess.run(['apt', 'update'], check=True)
-    subprocess.run(['apt', 'upgrade', '-y'], check=True)
+    subprocess.run(['sudo', 'apt', 'update'], check=True)
+    subprocess.run(['sudo', 'apt', 'upgrade', '-y'], check=True)
     
     print("➕ Adding PHP 8.3 repository (ppa:ondrej/php)...")
-    subprocess.run(['apt', 'install', '-y', 'software-properties-common'], check=True)
-    subprocess.run(['add-apt-repository', '-y', 'ppa:ondrej/php'], check=True)
-    subprocess.run(['apt', 'update'], check=True)
+    subprocess.run(['sudo', 'apt', 'install', '-y', 'software-properties-common'], check=True)
+    subprocess.run(['sudo', 'add-apt-repository', '-y', 'ppa:ondrej/php'], check=True)
+    subprocess.run(['sudo', 'apt', 'update'], check=True)
 
     print("🌐 Installing Apache, MySQL, PHP 8.3, and essential modules...")
     subprocess.run([
-        'apt', 'install', '-y',
+        'sudo', 'apt', 'install', '-y',
         'apache2', 'mysql-server',
         'php8.3', 'libapache2-mod-php8.3', 'php8.3-mysql',
         'zip', 'unzip'  # ✅ Added here
@@ -168,24 +168,24 @@ def install_lamp_stack():
 
     print("🧩 Installing PHP 8.3 extensions...")
     subprocess.run([
-        'apt', 'install', '-y',
+        'sudo', 'apt', 'install', '-y',
         'php8.3-mbstring', 'php8.3-xml', 'php8.3-curl', 'php8.3-mysql',
         'php8.3-zip', 'php8.3-gd', 'php8.3-sqlite3', 'sqlite3'
     ], check=True)
 
     # Set PHP 8.3 as the default CLI version
     print("⚙️ Setting PHP 8.3 as default...")
-    subprocess.run(['update-alternatives', '--set', 'php', '/usr/bin/php8.3'], check=True)
+    subprocess.run(['sudo', 'update-alternatives', '--set', 'php', '/usr/bin/php8.3'], check=True)
     
     # Enable PHP 8.3 for Apache
     print("🔧 Enabling PHP 8.3 in Apache...")
-    subprocess.run(['a2enmod', 'php8.3'], check=True)
+    subprocess.run(['sudo', 'a2enmod', 'php8.3'], check=True)
 
     print("🧬 Installing Git...")
-    subprocess.run(['apt', 'install', '-y', 'git'], check=True)
+    subprocess.run(['sudo', 'apt', 'install', '-y', 'git'], check=True)
 
     print("🐍 Installing Python 3 and pip...")
-    subprocess.run(['apt', 'install', '-y', 'python3', 'python3-pip'], check=True)
+    subprocess.run(['sudo', 'apt', 'install', '-y', 'python3', 'python3-pip'], check=True)
 
     print("🎼 Installing Composer...")
     subprocess.run(['cd', '/tmp'], shell=True)
