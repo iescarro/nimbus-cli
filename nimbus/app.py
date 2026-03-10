@@ -163,7 +163,7 @@ def install_lamp_stack():
         'sudo', 'apt', 'install', '-y',
         'apache2', 'mysql-server',
         'php8.3', 'libapache2-mod-php8.3', 'php8.3-mysql',
-        'zip', 'unzip'  # ✅ Added here
+        'zip', 'unzip'
     ], check=True)
 
     print("🧩 Installing PHP 8.3 extensions...")
@@ -180,6 +180,11 @@ def install_lamp_stack():
     # Enable PHP 8.3 for Apache
     print("🔧 Enabling PHP 8.3 in Apache...")
     subprocess.run(['sudo', 'a2enmod', 'php8.3'], check=True)
+    
+    # Enable Apache rewrite module
+    print("🔄 Enabling Apache rewrite module...")
+    subprocess.run(['sudo', 'a2enmod', 'rewrite'], check=True)
+    print("✅ Apache rewrite module enabled")
 
     print("🧬 Installing Git...")
     subprocess.run(['sudo', 'apt', 'install', '-y', 'git'], check=True)
@@ -195,7 +200,6 @@ def install_lamp_stack():
     subprocess.run(['php', '-r', "unlink('composer-setup.php');"], check=True)
 
     print("📦 Installing Node.js (LTS) and npm...")
-    # Updated Nodesource setup for version 22
     setup_cmd = 'curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -'
     subprocess.run(setup_cmd, shell=True, check=True)
     subprocess.run(['sudo', 'apt-get', 'install', '-y', 'nodejs'], check=True)
@@ -205,7 +209,7 @@ def install_lamp_stack():
         'sudo', 'apt', 'install', '-y', 'certbot', 'python3-certbot-apache'
     ], check=True)
 
-    # Restart Apache to apply PHP changes
+    # Restart Apache to apply all changes
     print("🔄 Restarting Apache...")
     subprocess.run(['sudo', 'systemctl', 'restart', 'apache2'], check=True)
 
