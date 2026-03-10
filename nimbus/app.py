@@ -191,7 +191,7 @@ def install_lamp_stack():
     subprocess.run(['cd', '/tmp'], shell=True)
     subprocess.run(['php', '-r', "copy('https://getcomposer.org/installer', 'composer-setup.php');"], check=True)
     subprocess.run(['php', 'composer-setup.php'], check=True)
-    subprocess.run(['mv', 'composer.phar', '/usr/local/bin/composer'], check=True)
+    subprocess.run(['sudo', 'mv', 'composer.phar', '/usr/local/bin/composer'], check=True)
     subprocess.run(['php', '-r', "unlink('composer-setup.php');"], check=True)
 
     print("📦 Installing Node.js (LTS) and npm...")
@@ -202,11 +202,11 @@ def install_lamp_stack():
 
     print("🔐 Installing Certbot for SSL (Let's Encrypt)...")
     subprocess.run([
-        'apt', 'install', '-y', 'certbot', 'python3-certbot-apache'
+        'sudo', 'apt', 'install', '-y', 'certbot', 'python3-certbot-apache'
     ], check=True)
 
     # Restart Apache to apply PHP changes
     print("🔄 Restarting Apache...")
-    subprocess.run(['systemctl', 'restart', 'apache2'], check=True)
+    subprocess.run(['sudo', 'systemctl', 'restart', 'apache2'], check=True)
 
     print("✅ All done! LAMP stack with PHP 8.3, Python, Certbot, and tools installed.")
