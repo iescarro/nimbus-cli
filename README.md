@@ -16,7 +16,7 @@ You can install Nimbus CLI directly from GitHub:
 
 ```bash
 sudo apt update
-sudo apt install python3-venv python3-pip -y
+sudo apt install python3 python3-venv python3-pip -y
 python3 -m venv ~/nimbus-env
 source ~/nimbus-env/bin/activate
 
@@ -42,14 +42,6 @@ Output:
 
 ### 🚀 Install LAMP Stack
 
-To install the LAMP (Linux, Apache, MySQL/MariaDB, PHP) stack using Nimbus:
-
-```bash
-nimbus install-lamp
-```
-
-This command sets up the essential components for running PHP-based web applications on your system.
-
 **⚠️ Node.js Note**
 
 If you are installing Node.js as part of your development stack and encounter package conflicts (common on Ubuntu systems with pre-installed Node.js), you must remove the conflicting packages before running nimbus install-lamp.
@@ -62,6 +54,14 @@ sudo apt autoremove -y
 ```
 
 This ensures that a clean version of Node.js (LTS) and npm can be installed from the official NodeSource repository without conflicts.
+
+To install the LAMP (Linux, Apache, MySQL/MariaDB, PHP) stack using Nimbus:
+
+```bash
+nimbus install-lamp
+```
+
+This command sets up the essential components for running PHP-based web applications on your system.
 
 ### ✅ Create a new user and web directory
 
@@ -213,6 +213,13 @@ nimbus hello
 
 ```bash
 Hello, friend!
+```
+
+## RaspiOS
+
+```bash
+pip install --upgrade pip setuptools wheel
+pip install cryptography==46.0.2
 ```
 
 ## 📄 License
