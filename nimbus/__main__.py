@@ -94,11 +94,25 @@ def main():
     # Site management commands
     elif command == "create-site":
         if len(sys.argv) != 4:
-            print("Usage: nimbus create-site <username> <domain>")
+            print("Usage: nimbus create-site <username> <domain> [--nginx] [--apache]")
+            print("  --nginx   Create an Nginx site (default)")
+            print("  --apache  Create an Apache site")
             sys.exit(1)
         username = sys.argv[2]
         domain = sys.argv[3]
         create_apache_site(username, domain)
+        server_type = "nginx"
+        if len(sys.argv) > 4:
+            if "--apache" in sys.argv:
+                server_type = "apache"
+            elif "--nginx" in sys.argv:
+                server_type = "nginx"
+        if server_type == "apache":
+            from .site import create_apache_site
+            create_apache_site(username, domain)
+        else:  # nginx
+            from .nginx import create_nginx_site
+            create_nginx_site(username, domain)
     elif command == "create-subdomain":
         if len(sys.argv) != 5:
             print("Usage: nimbus create-subdomain <username> <domain> <subdomain>")
