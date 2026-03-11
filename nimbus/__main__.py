@@ -7,7 +7,7 @@ import subprocess
 from .__version__ import __version__
 
 from .nimbus import say_hello, print_usage
-from .app import init, install_lamp_stack, open_app, deploy_app
+from .app import init, install_lamp_stack, install_lemp_stack, open_app, deploy_app
 from .db import DB
 from .site import enable_ssl, create_site, create_subdomain
 from .user import create_user
@@ -53,6 +53,8 @@ def main():
     # System setup commands
     elif command == "install-lamp":
         install_lamp_stack()
+    elif command == "install-lemp":
+        install_lemp_stack()
     elif command == "create-user":
         if len(sys.argv) != 4:
             print("Usage: nimbus.py create-user <username> <domain>")
