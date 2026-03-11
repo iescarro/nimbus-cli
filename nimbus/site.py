@@ -86,7 +86,7 @@ def create_subdomain(username, domain, subdomain):
 def enable_ssl(domain):
     print(f"🔐 Enabling SSL for {domain} using Certbot...")
     try:
-        subprocess.run(['certbot', '--apache', '-d', domain], check=True)
+        subprocess.run(['sudo', 'certbot', '--apache', '-d', domain], check=True)
         print(f"✅ SSL enabled for {domain}")
     except subprocess.CalledProcessError:
         print(f"❌ Failed to enable SSL for {domain}. Please check your DNS and Apache config.")
