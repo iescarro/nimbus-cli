@@ -100,7 +100,6 @@ def main():
             sys.exit(1)
         username = sys.argv[2]
         domain = sys.argv[3]
-        create_apache_site(username, domain)
         server_type = "nginx"
         if len(sys.argv) > 4:
             if "--apache" in sys.argv:
