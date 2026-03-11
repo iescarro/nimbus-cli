@@ -18,12 +18,16 @@ class DB:
         CREATE DATABASE IF NOT EXISTS `{db_name}`;
         CREATE USER IF NOT EXISTS '{db_user}'@'localhost' IDENTIFIED BY '{db_password}';
         GRANT ALL PRIVILEGES ON `{db_name}`.* TO '{db_user}'@'localhost';
+        GRANT PROCESS ON *.* TO '{db_user}'@'localhost';
+        GRANT LOCK TABLES ON `{db_name}`.* TO '{db_user}'@'localhost';
+        GRANT SHOW VIEW ON `{db_name}`.* TO '{db_user}'@'localhost';
         FLUSH PRIVILEGES;
         """
 
         try:
             subprocess.run(['sudo', 'mysql', '-u', 'root', '-e', sql], check=True)
             print(f"✅ Database '{db_name}' and user '{db_user}' created successfully.")
+            print(f"   🔐 Backup privileges granted: PROCESS, LOCK TABLES, SHOW VIEW")
         except subprocess.CalledProcessError:
             print("❌ Failed to create database or user.")
             sys.exit(1)
