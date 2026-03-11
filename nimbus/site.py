@@ -1,7 +1,8 @@
 import subprocess
 import os
+from .app import write_nimbus_index
 
-def create_site(username, domain):
+def create_apache_site(username, domain):
     base_dir = f"/home/{username}/domains/{domain}/public_html"
     conf_file = f"/etc/apache2/sites-available/{domain}.conf"
     log_name = domain.replace('.', '_')
@@ -32,7 +33,7 @@ def create_site(username, domain):
 </VirtualHost>
 """
 
-    # Write config file
+    # Write Apache config to file
     with open('/tmp/apache_temp.conf', 'w') as temp_conf:
         temp_conf.write(apache_config.strip())
 
@@ -52,8 +53,8 @@ def create_subdomain(username, domain, subdomain):
     os.makedirs(base_dir, exist_ok=True)
     write_nimbus_index(base_dir)
 
-    subprocess.run(['chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
-    subprocess.run(['chmod', '-R', '755', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
+    subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
+    subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
 
     # Apache config content
     apache_config = f"""
@@ -77,9 +78,9 @@ def create_subdomain(username, domain, subdomain):
     with open('/tmp/apache_sub_temp.conf', 'w') as temp_conf:
         temp_conf.write(apache_config.strip())
 
-    subprocess.run(['mv', '/tmp/apache_sub_temp.conf', conf_file], check=True)
-    subprocess.run(['a2ensite', f'{fqdn}.conf'], check=True)
-    subprocess.run(['systemctl', 'reload', 'apache2'], check=True)
+    subprocess.run(['sudo', 'mv', '/tmp/apache_sub_temp.conf', conf_file], check=True)
+    subprocess.run(['sudo', 'a2ensite', f'{fqdn}.conf'], check=True)
+    subprocess.run(['sudo', 'systemctl', 'reload', 'apache2'], check=True)
 
     print(f"✅ Subdomain setup complete: {fqdn} under user {username}")
 
