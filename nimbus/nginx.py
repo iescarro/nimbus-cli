@@ -40,7 +40,7 @@ server {{
     # PHP-FPM handling (if using PHP)
     location ~ \.php$ {{
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;  # Adjust PHP version as needed
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;  # Adjust PHP version as needed
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }}
