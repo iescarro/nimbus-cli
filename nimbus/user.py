@@ -34,7 +34,7 @@ def create_user(username, domain):
         pwd.getpwnam(username)
         print(f"⚠️ User '{username}' already exists. Skipping user creation.")
     except KeyError:
-        subprocess.run(['adduser', '--disabled-password', '--gecos', '', username], check=True)
+        subprocess.run(['sudo', 'adduser', '--disabled-password', '--gecos', '', username], check=True)
         print(f"✅ User '{username}' created.")
 
         # Wait a moment to allow system to register the user
@@ -47,10 +47,10 @@ def create_user(username, domain):
             time.sleep(3)  # Give WSL time to finalize user registration
 
         # Create the web directory as root
-        subprocess.run(['mkdir', '-p', web_dir], check=True)
+        subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
         write_nimbus_index(web_dir)
 
-        subprocess.run(['chown', '-R', f"{username}:{username}", user_home], check=True)
-        subprocess.run(['chmod', '-R', '755', user_home], check=True)
+        subprocess.run(['sudo', 'chown', '-R', f"{username}:www-data", user_home], check=True)
+        subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
         print(f"✅ User '{username}' ready. Web directory: {web_dir}")
