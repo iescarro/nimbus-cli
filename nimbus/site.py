@@ -84,10 +84,16 @@ def create_apache_subdomain(username, domain, subdomain):
 
     print(f"✅ Subdomain setup complete: {fqdn} under user {username}")
 
-def enable_ssl(domain):
+def enable_ssl(domain, web_server = "apache"):
     print(f"🔐 Enabling SSL for {domain} using Certbot...")
     try:
-        subprocess.run(['sudo', 'certbot', '--apache', '-d', domain], check=True)
+        if web_server == "apache":
+            subprocess.run(['sudo', 'certbot', '--apache', '-d', domain], check=True)
+        elif web_server == "nginx":
+            subprocess.run(['sudo', 'certbot', '--nginx', '-d', domain], check=True)
+        else:
+            print(f"❌ Unsupported web server: {web_server}")
+            return
         print(f"✅ SSL enabled for {domain}")
     except subprocess.CalledProcessError:
-        print(f"❌ Failed to enable SSL for {domain}. Please check your DNS and Apache config.")
+        print(f"❌ Failed to enable SSL for {domain}. Please check your DNS and {web_server.capitalize()} config.")

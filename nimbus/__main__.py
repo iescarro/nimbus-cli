@@ -134,11 +134,19 @@ def main():
             from .nginx import create_nginx_subdomain
             create_nginx_subdomain(username, domain, subdomain)
     elif command == "enable-ssl":
-        if len(sys.argv) != 3:
-            print("Usage: nimbus enable-ssl <domain>")
+        if len(sys.argv) < 3:
+            print("Usage: nimbus enable-ssl <domain> [--apache] [--nginx]")
+            print("  --apache  Use Apache (default)")
+            print("  --nginx   Use Nginx")
             sys.exit(1)
         domain = sys.argv[2]
-        enable_ssl(domain)
+        web_server = "apache"
+        if len(sys.argv) > 3:
+            if "--apache" in sys.argv:
+                web_server = "apache"
+            elif "--nginx" in sys.argv:
+                web_server = "nginx"
+        enable_ssl(domain, web_server)
     # elif command == "db:migrate":
     #     if len(sys.argv) != 2:
     #         print("Usage: nimbus db:migrate")
