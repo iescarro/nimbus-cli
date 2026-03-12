@@ -43,7 +43,7 @@ def create_apache_site(username, domain):
 
     print(f"✅ Site setup complete for {domain} under user {username}")
 
-def create_subdomain(username, domain, subdomain):
+def create_apache_subdomain(username, domain, subdomain):
     fqdn = f"{subdomain}.{domain}"
     base_dir = f"/home/{username}/domains/{domain}/{subdomain}"
     conf_file = f"/etc/apache2/sites-available/{fqdn}.conf"

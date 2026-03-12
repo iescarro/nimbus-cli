@@ -9,7 +9,7 @@ from .__version__ import __version__
 from .nimbus import say_hello, print_usage
 from .app import init, install_lamp_stack, install_lemp_stack, open_app, deploy_app
 from .db import DB
-from .site import enable_ssl, create_apache_site, create_subdomain
+from .site import enable_ssl, create_apache_site, create_apache_subdomain
 from .user import create_user
 
 def main():
@@ -109,17 +109,30 @@ def main():
         if server_type == "apache":
             from .site import create_apache_site
             create_apache_site(username, domain)
-        else:  # nginx
+        else:
             from .nginx import create_nginx_site
             create_nginx_site(username, domain)
     elif command == "create-subdomain":
-        if len(sys.argv) != 5:
-            print("Usage: nimbus create-subdomain <username> <domain> <subdomain>")
+        if len(sys.argv) <= 5:
+            print("Usage: nimbus create-subdomain <username> <domain> <subdomain> [--nginx] [--apache]")
+            print("  --nginx   Create an Nginx subdomain (default)")
+            print("  --apache  Create an Apache subdomain")
             sys.exit(1)
         username = sys.argv[2]
         domain = sys.argv[3]
         subdomain = sys.argv[4]
-        create_subdomain(username, domain, subdomain)
+        server_type = "nginx"
+        if len(sys.argv) > 5:
+            if "--apache" in sys.argv:
+                server_type = "apache"
+            elif "--nginx" in sys.argv:
+                server_type = "nginx"        
+        if server_type == "apache":
+            from .site import create_apache_subdomain
+            create_apache_subdomain(username, domain, subdomain)
+        else:
+            from .nginx import create_nginx_subdomain
+            create_nginx_subdomain(username, domain, subdomain)
     elif command == "enable-ssl":
         if len(sys.argv) != 3:
             print("Usage: nimbus enable-ssl <domain>")
