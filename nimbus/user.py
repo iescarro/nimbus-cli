@@ -54,3 +54,12 @@ def create_user(username, domain):
         subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
         print(f"✅ User '{username}' ready. Web directory: {web_dir}")
+
+def delete_user(username):
+    try:
+        import pwd
+        pwd.getpwnam(username)
+        subprocess.run(['sudo', 'deluser', '--remove-home', username], check=True)
+        print(f"✅ User '{username}' deleted.")
+    except KeyError:
+        print(f"⚠️ User '{username}' does not exist. Skipping deletion.")
