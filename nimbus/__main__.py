@@ -10,7 +10,7 @@ from .nimbus import say_hello, print_usage
 from .app import init, install_lamp_stack, install_lemp_stack, open_app, deploy_app
 from .db import DB
 from .site import enable_ssl, create_apache_site, create_apache_subdomain
-from .user import create_user
+from .user import create_user, delete_user
 
 def main():
     if len(sys.argv) < 2:
@@ -62,6 +62,12 @@ def main():
         username = sys.argv[2]
         domain = sys.argv[3]
         create_user(username, domain)
+    elif command == "delete-user":
+        if len(sys.argv) != 3:
+            print("Usage: nimbus.py delete-user <username>")
+            sys.exit(1)
+        username = sys.argv[2]
+        delete_user(username)
 
     # Database management commands
     elif command == "create-database":
