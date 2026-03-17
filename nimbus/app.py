@@ -371,7 +371,7 @@ def write_nimbus_index(base_dir):
 <body>
     <div class="box">
         <h1>🚀 Nimbus is Ready!</h1>
-        <p>Your LAMP server is up and running.</p>
+        <p>Your server is up and running.</p>
         <p>Place your website files here in <code>public_html</code>.</p>
     </div>
 </body>
