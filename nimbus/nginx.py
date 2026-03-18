@@ -114,7 +114,7 @@ server {{
     
     server_name {fqdn};
     
-    root {base_dir};
+    root {base_dir}/public;
     index index.php index.html index.htm;
     
     access_log /var/log/nginx/{log_name}_access.log;
