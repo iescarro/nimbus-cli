@@ -169,6 +169,10 @@ def main():
             elif "--nginx" in sys.argv:
                 web_server = "nginx"
         enable_ssl(domain, web_server)
+    elif command == "setup-firewall":
+        from .firewall import Firewall
+        Firewall.setup()
+
     # elif command == "db:migrate":
     #     if len(sys.argv) != 2:
     #         print("Usage: nimbus db:migrate")
