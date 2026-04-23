@@ -1,9 +1,7 @@
 class Swap:
 
-    def __init__(self):
-        pass
-
-    def off(self):
+    @staticmethod
+    def off():
         import subprocess
         
         commands = [
@@ -23,7 +21,8 @@ class Swap:
             except Exception as e:
                 print(f"Failed to execute {cmd}: {e}")
 
-    def on(self, size = "2G"):
+    @staticmethod
+    def on(size = "2G"):
         import subprocess
         
         commands = [

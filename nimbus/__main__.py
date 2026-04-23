@@ -58,12 +58,11 @@ def main():
     elif command == "install-lemp":
         Lemp.install()
 
+    # Swap management commands
     elif command == "swap-on":
-        swap = Swap()
-        swap.on()
+        Swap.on()
     elif command == "swap-off":
-        swap = Swap()
-        swap.off()
+        Swap.off()
 
     elif command == "create-user":
         if len(sys.argv) != 4:
