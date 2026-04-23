@@ -2,25 +2,28 @@ import os
 import subprocess
 from .app import write_nimbus_index
 
-def create_nginx_site(username, domain):
-    """
-    Create an Nginx site configuration for a given username and domain
-    """
-    base_dir = f"/home/{username}/domains/{domain}/public_html"
-    conf_file = f"/etc/nginx/sites-available/{domain}"
-    enabled_link = f"/etc/nginx/sites-enabled/{domain}"
-    log_name = domain.replace('.', '_')
-    
-    # Create directory structure
-    os.makedirs(base_dir, exist_ok=True)
-    write_nimbus_index(base_dir)  # Your existing function
-    
-    # Set proper permissions
-    subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}'], check=True)
-    subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}'], check=True)
-    
-    # Nginx config content
-    nginx_config = f"""
+class Nginx:
+
+    @staticmethod
+    def create_site(username, domain):
+        """
+        Create an Nginx site configuration for a given username and domain
+        """
+        base_dir = f"/home/{username}/domains/{domain}/public_html"
+        conf_file = f"/etc/nginx/sites-available/{domain}"
+        enabled_link = f"/etc/nginx/sites-enabled/{domain}"
+        log_name = domain.replace('.', '_')
+        
+        # Create directory structure
+        os.makedirs(base_dir, exist_ok=True)
+        write_nimbus_index(base_dir)  # Your existing function
+        
+        # Set proper permissions
+        subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}'], check=True)
+        subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}'], check=True)
+        
+        # Nginx config content
+        nginx_config = f"""
 server {{
     listen 80;
     listen [::]:80;
@@ -59,97 +62,98 @@ server {{
     }}
 }}
 """
-    
-    # Write config to temp file
-    with open('/tmp/nginx_temp.conf', 'w') as temp_conf:
-        temp_conf.write(nginx_config.strip())
-    
-    # Move to sites-available
-    subprocess.run(['sudo', 'mv', '/tmp/nginx_temp.conf', conf_file], check=True)
-    
-    # Create symlink to enable site
-    if os.path.exists(enabled_link):
-        subprocess.run(['sudo', 'rm', enabled_link], check=True)
-    subprocess.run(['sudo', 'ln', '-s', conf_file, enabled_link], check=True)
-    
-    # Test Nginx configuration
-    try:
-        subprocess.run(['sudo', 'nginx', '-t'], check=True, capture_output=True)
-        print("✅ Nginx configuration test passed")
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Nginx configuration test failed: {e.stderr.decode()}")
-        return False
-    
-    # Reload Nginx
-    subprocess.run(['sudo', 'systemctl', 'reload', 'nginx'], check=True)
-    
-    print(f"✅ Nginx site setup complete for {domain} under user {username}")
-    print(f"📁 Document root: {base_dir}")
-    print(f"🔗 Config file: {conf_file}")
-    
-    return True
+        
+        # Write config to temp file
+        with open('/tmp/nginx_temp.conf', 'w') as temp_conf:
+            temp_conf.write(nginx_config.strip())
+        
+        # Move to sites-available
+        subprocess.run(['sudo', 'mv', '/tmp/nginx_temp.conf', conf_file], check=True)
+        
+        # Create symlink to enable site
+        if os.path.exists(enabled_link):
+            subprocess.run(['sudo', 'rm', enabled_link], check=True)
+        subprocess.run(['sudo', 'ln', '-s', conf_file, enabled_link], check=True)
+        
+        # Test Nginx configuration
+        try:
+            subprocess.run(['sudo', 'nginx', '-t'], check=True, capture_output=True)
+            print("✅ Nginx configuration test passed")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Nginx configuration test failed: {e.stderr.decode()}")
+            return False
+        
+        # Reload Nginx
+        subprocess.run(['sudo', 'systemctl', 'reload', 'nginx'], check=True)
+        
+        print(f"✅ Nginx site setup complete for {domain} under user {username}")
+        print(f"📁 Document root: {base_dir}")
+        print(f"🔗 Config file: {conf_file}")
+        
+        return True
 
-def create_nginx_subdomain(username, domain, subdomain):
-    fqdn = f"{subdomain}.{domain}"
-    base_dir = f"/home/{username}/domains/{domain}/{subdomain}"
-    conf_file = f"/etc/nginx/sites-available/{fqdn}.conf"
-    log_name = f"{subdomain}_{domain}".replace('.', '_')
+    @staticmethod
+    def create_subdomain(username, domain, subdomain):
+        fqdn = f"{subdomain}.{domain}"
+        base_dir = f"/home/{username}/domains/{domain}/{subdomain}"
+        conf_file = f"/etc/nginx/sites-available/{fqdn}.conf"
+        log_name = f"{subdomain}_{domain}".replace('.', '_')
 
-    # Create directory structure
-    os.makedirs(base_dir, exist_ok=True)
-    write_nimbus_index(base_dir)
+        # Create directory structure
+        os.makedirs(base_dir, exist_ok=True)
+        write_nimbus_index(base_dir)
 
-    subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
-    subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
+        subprocess.run(['sudo', 'chown', '-R', f'{username}:{username}', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
+        subprocess.run(['sudo', 'chmod', '-R', '755', f'/home/{username}/domains/{domain}/{subdomain}'], check=True)
 
-    # Detect PHP version for PHP-FPM socket
-    # php_version = detect_php_version()
-    php_socket = f"unix:/var/run/php/php8.3-fpm.sock"  # Adjust PHP version as needed
+        # Detect PHP version for PHP-FPM socket
+        # php_version = detect_php_version()
+        php_socket = f"unix:/var/run/php/php8.3-fpm.sock"  # Adjust PHP version as needed
 
-    # Nginx config content for subdomain
-    nginx_config = f"""
-server {{
-    listen 80;
-    listen [::]:80;
-    
-    server_name {fqdn};
-    
-    root {base_dir}/public;
-    index index.php index.html index.htm;
-    
-    access_log /var/log/nginx/{log_name}_access.log;
-    error_log /var/log/nginx/{log_name}_error.log;
-    
-    location / {{
-        try_files $uri $uri/ /index.php?$query_string;
+        # Nginx config content for subdomain
+        nginx_config = f"""
+    server {{
+        listen 80;
+        listen [::]:80;
+        
+        server_name {fqdn};
+        
+        root {base_dir}/public;
+        index index.php index.html index.htm;
+        
+        access_log /var/log/nginx/{log_name}_access.log;
+        error_log /var/log/nginx/{log_name}_error.log;
+        
+        location / {{
+            try_files $uri $uri/ /index.php?$query_string;
+        }}
+        
+        location ~ \\.php$ {{
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass {php_socket};
+        }}
+        
+        location ~ /\.ht {{
+            deny all;
+        }}
     }}
-    
-    location ~ \\.php$ {{
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass {php_socket};
-    }}
-    
-    location ~ /\.ht {{
-        deny all;
-    }}
-}}
-"""
+    """
 
-    # Write Nginx config to temp file
-    with open('/tmp/nginx_sub_temp.conf', 'w') as temp_conf:
-        temp_conf.write(nginx_config.strip())
+        # Write Nginx config to temp file
+        with open('/tmp/nginx_sub_temp.conf', 'w') as temp_conf:
+            temp_conf.write(nginx_config.strip())
 
-    # Move to sites-available
-    subprocess.run(['sudo', 'mv', '/tmp/nginx_sub_temp.conf', conf_file], check=True)
-    
-    # Create symbolic link to enable site
-    subprocess.run(['sudo', 'ln', '-sf', conf_file, f'/etc/nginx/sites-enabled/{fqdn}.conf'], check=True)
-    
-    # Test Nginx configuration
-    subprocess.run(['sudo', 'nginx', '-t'], check=True)
-    
-    # Reload Nginx
-    subprocess.run(['sudo', 'systemctl', 'reload', 'nginx'], check=True)
+        # Move to sites-available
+        subprocess.run(['sudo', 'mv', '/tmp/nginx_sub_temp.conf', conf_file], check=True)
+        
+        # Create symbolic link to enable site
+        subprocess.run(['sudo', 'ln', '-sf', conf_file, f'/etc/nginx/sites-enabled/{fqdn}.conf'], check=True)
+        
+        # Test Nginx configuration
+        subprocess.run(['sudo', 'nginx', '-t'], check=True)
+        
+        # Reload Nginx
+        subprocess.run(['sudo', 'systemctl', 'reload', 'nginx'], check=True)
 
-    print(f"✅ Nginx subdomain setup complete: {fqdn} under user {username}")
-    print(f"   📁 Document root: {base_dir}")
+        print(f"✅ Nginx subdomain setup complete: {fqdn} under user {username}")
+        print(f"   📁 Document root: {base_dir}")

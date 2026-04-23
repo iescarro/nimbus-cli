@@ -36,7 +36,7 @@ nimbus hello
 
 Output:
 
-```cpp
+```bash
 👋 Hello, friend!
 ```
 
@@ -55,13 +55,25 @@ sudo apt autoremove -y
 
 This ensures that a clean version of Node.js (LTS) and npm can be installed from the official NodeSource repository without conflicts.
 
-To install the LAMP (Linux, Apache, MySQL/MariaDB, PHP) stack using Nimbus:
+To install the LEMP (Linux, Nginx, MySQL/MariaDB, PHP) stack using Nimbus. This works smoothly with the root user.
 
 ```bash
-nimbus install-lamp
+nimbus install-lemp
 ```
 
 This command sets up the essential components for running PHP-based web applications on your system.
+
+**⚠️ For non-root users:** If `nimbus` is not in your PATH, use the fully qualified path:
+
+```bash
+sudo /home/<user>/nimbus-env/bin/nimbus install-lemp
+```
+
+To verify the path location:
+
+```bash
+which nimbus
+```
 
 ### ✅ Create a new user and web directory
 
@@ -77,13 +89,13 @@ nimbus create-user alice example.com
 
 This creates:
 
-* Linux user alice
-* Directory `/home/alice/domains/example.com/public_html`
-* Correct ownership and permissions
+- Linux user alice
+- Directory `/home/alice/domains/example.com/public_html`
+- Correct ownership and permissions
 
 > ℹ️ Note:
-The user is created with a disabled password by default.
-To allow su - alice or terminal login, manually set a password:
+> The user is created with a disabled password by default.
+> To allow su - alice or terminal login, manually set a password:
 
 ```bash
 sudo passwd alice
@@ -98,14 +110,16 @@ nimbus create-site <username> <domain>
 ```
 
 Example:
+
 ```bash
 nimbus create-site alice example.com
 ```
 
 This will:
-* Create an Apache VirtualHost for example.com
-* Enable the site and reload Apache
-* Generate a default index.html inside public_html with a "Nimbus is Ready!" page like this:
+
+- Create an Apache VirtualHost for example.com
+- Enable the site and reload Apache
+- Generate a default index.html inside public_html with a "Nimbus is Ready!" page like this:
 
 <p align="center"> <img src="https://raw.githubusercontent.com/iescarro/nimbus-cli/main/art/sample.png?v=1" alt="Nimbus is Ready!" width="400"/> </p>
 
@@ -136,8 +150,9 @@ pip install --upgrade --force-reinstall git+https://github.com/iescarro/nimbus-c
 ```
 
 This command ensures that:
-* The latest code from the main branch is downloaded
-* The package is reinstalled, even if the version number hasn't changed
+
+- The latest code from the main branch is downloaded
+- The package is reinstalled, even if the version number hasn't changed
 
 > 💡 Tip: To avoid unnecessary reinstalls, always update the version in setup.py when making changes.
 
@@ -153,7 +168,7 @@ pip install -e .
 
 This installs it in editable mode, so changes take effect immediately.
 
-or 
+or
 
 ```bash
 python -m nimbus <command> <option...>
@@ -171,8 +186,8 @@ nimbus-cli/
 
 ## 🔐 Requirements
 
-* Python 3.6+
-* sudo privileges for user creation
+- Python 3.6+
+- sudo privileges for user creation
 
 ## 🛠️ Troubleshooting
 
@@ -223,7 +238,9 @@ pip install cryptography==46.0.2
 ```
 
 ## 📄 License
+
 MIT License — feel free to use and contribute!
 
 ## 🙌 Author
+
 Made with ❤️ by ICE Solutions

@@ -109,28 +109,31 @@ def main():
 
     # Site management commands
     elif command == "create-site":
-        if len(sys.argv) <= 4:
-            print("Usage: nimbus create-site <username> <domain> [--nginx] [--apache]")
+        if len(sys.argv) <= 3:
+            print("Usage: nimbus create-site <username> <domain> [--nginx|--apache]")
             print("  --nginx   Create an Nginx site (default)")
             print("  --apache  Create an Apache site")
             sys.exit(1)
         username = sys.argv[2]
         domain = sys.argv[3]
         server_type = "nginx"
-        if len(sys.argv) > 4:
-            if "--apache" in sys.argv:
-                server_type = "apache"
-            elif "--nginx" in sys.argv:
-                server_type = "nginx"
+        flags = sys.argv[4:]
+        if "--apache" in flags and "--nginx" in flags:
+            print("Error: Choose only one: --nginx or --apache")
+            sys.exit(1)
+        elif "--apache" in flags:
+            server_type = "apache"
+        elif "--nginx" in flags:
+            server_type = "nginx"
         if server_type == "apache":
             from .site import create_apache_site
             create_apache_site(username, domain)
         else:
-            from .nginx import create_nginx_site
-            create_nginx_site(username, domain)
+            from .nginx import Nginx
+            Nginx.create_site(username, domain)
     elif command == "create-subdomain":
-        if len(sys.argv) <= 5:
-            print("Usage: nimbus create-subdomain <username> <domain> <subdomain> [--nginx] [--apache]")
+        if len(sys.argv) <= 3:
+            print("Usage: nimbus create-subdomain <username> <domain> <subdomain> [--nginx|--apache]")
             print("  --nginx   Create an Nginx subdomain (default)")
             print("  --apache  Create an Apache subdomain")
             sys.exit(1)
@@ -138,17 +141,20 @@ def main():
         domain = sys.argv[3]
         subdomain = sys.argv[4]
         server_type = "nginx"
-        if len(sys.argv) > 5:
-            if "--apache" in sys.argv:
-                server_type = "apache"
-            elif "--nginx" in sys.argv:
-                server_type = "nginx"        
+        flags = sys.argv[5:]
+        if "--apache" in flags and "--nginx" in flags:
+            print("Error: Choose only one: --nginx or --apache")
+            sys.exit(1)
+        elif "--apache" in flags:
+            server_type = "apache"
+        elif "--nginx" in flags:
+            server_type = "nginx"        
         if server_type == "apache":
             from .site import create_apache_subdomain
             create_apache_subdomain(username, domain, subdomain)
         else:
-            from .nginx import create_nginx_subdomain
-            create_nginx_subdomain(username, domain, subdomain)
+            from .nginx import Nginx
+            Nginx.create_subdomain(username, domain, subdomain)
     elif command == "enable-ssl":
         if len(sys.argv) < 3:
             print("Usage: nimbus enable-ssl <domain> [--apache] [--nginx]")
