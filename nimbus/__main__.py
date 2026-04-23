@@ -71,7 +71,7 @@ def main():
             sys.exit(1)
         username = sys.argv[2]
         domain = sys.argv[3]
-        User.create(username, domain)s
+        User.create(username, domain)
     elif command == "delete-user":
         if len(sys.argv) != 3:
             print("Usage: nimbus.py delete-user <username>")
