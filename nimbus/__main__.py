@@ -7,7 +7,7 @@ import subprocess
 from .__version__ import __version__
 
 from .nimbus import say_hello, print_usage
-from .app import App, init, open_app
+from .app import App, create_custom_settings, init, open_app
 from .lamp import Lamp
 from .lemp import Lemp
 from .db import DB
@@ -64,6 +64,12 @@ def main():
         Swap.on()
     elif command == "swap-off":
         Swap.off()
+
+    elif command == "create-custom-settings":
+        if len(sys.argv) != 3:
+            print("Usage: nimbus create-custom-settings")
+            sys.exit(1)
+        create_custom_settings()
 
     # User management
     elif command == "create-user":

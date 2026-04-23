@@ -190,3 +190,52 @@ def write_nimbus_index(base_dir):
     index_path = os.path.join(base_dir, "index.html")
     with open(index_path, "w") as f:
         f.write(index_html.strip())
+
+
+
+def create_custom_settings():
+    """Write system security settings to sysctl configuration file"""
+    sysctl_content = """
+# IP Spoofing protection (IPv4)
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+
+# Ignore ICMP broadcast requests (IPv4)
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+
+# Disable source packet routing (IPv4)
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.default.accept_source_route = 0
+
+# Enable TCP SYN cookies (IPv4)
+net.ipv4.tcp_syncookies = 1
+
+# Log Martians (IPv4)
+net.ipv4.conf.all.log_martians = 1
+net.ipv4.conf.default.log_martians = 1
+
+# Disable source packet routing (IPv6)
+net.ipv6.conf.all.accept_source_route = 0
+net.ipv6.conf.default.accept_source_route = 0
+
+# Disable IPv6 redirects
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+
+# Disable IPv6 router advertisements if not needed
+net.ipv6.conf.all.accept_ra = 0
+net.ipv6.conf.default.accept_ra = 0
+"""
+    sysctl_path = Path("/etc/sysctl.d/99-custom.conf")
+    try:
+        with open(sysctl_path, 'w') as f:
+            f.write(sysctl_content.strip())
+        print(f"✅ System security settings file created at: {sysctl_path.absolute()}")
+
+        subprocess.run(['sudo', 'sysctl', '--system'], check=False)
+        print("🔄 System settings reloaded with sysctl --system")
+
+        return True
+    except Exception as e:
+        print(f"❌ Failed to create sysctl configuration: {str(e)}")
+        return False
