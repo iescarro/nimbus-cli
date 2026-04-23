@@ -11,6 +11,7 @@ from .app import init, install_lamp_stack, install_lemp_stack, open_app, deploy_
 from .db import DB
 from .site import enable_ssl, create_apache_site, create_apache_subdomain
 from .user import create_user, delete_user
+from .swap import Swap
 
 def main():
     if len(sys.argv) < 2:
@@ -55,6 +56,13 @@ def main():
         install_lamp_stack()
     elif command == "install-lemp":
         install_lemp_stack()
+    elif command == "swap-on":
+        swap = Swap()
+        swap.on()
+    elif command == "swap-off":
+        swap = Swap()
+        swap.off()
+
     elif command == "create-user":
         if len(sys.argv) != 4:
             print("Usage: nimbus.py create-user <username> <domain>")
