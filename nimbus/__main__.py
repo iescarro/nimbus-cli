@@ -41,13 +41,13 @@ def main():
             sys.exit(1)
     elif command == "deploy":
         if len(sys.argv) == 2:
-            deploy_app()  # Uses default:default
+            App.deploy() # Uses default:default
         elif len(sys.argv) == 3:
             if ':' in sys.argv[2]:
                 env, app = sys.argv[2].split(':')
-                deploy_app(environment=env, app_name=app)
+                App.deploy(environment=env, app_name=app)
             else:
-                deploy_app(app_name=sys.argv[2])  # Uses default env
+                App.deploy(app_name=sys.argv[2])  # Uses default env
         else:
             print("Usage: nimbus deploy [env:app|app]")
             sys.exit(1)
