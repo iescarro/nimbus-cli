@@ -8,6 +8,8 @@ from .__version__ import __version__
 
 from .nimbus import say_hello, print_usage
 from .app import init, install_lamp_stack, install_lemp_stack, open_app, deploy_app
+from .app import App, init, install_lamp_stack, open_app
+from .lemp import Lemp
 from .db import DB
 from .site import enable_ssl, create_apache_site, create_apache_subdomain
 from .user import create_user, delete_user
@@ -55,7 +57,8 @@ def main():
     elif command == "install-lamp":
         install_lamp_stack()
     elif command == "install-lemp":
-        install_lemp_stack()
+        Lemp.install()
+
     elif command == "swap-on":
         swap = Swap()
         swap.on()
