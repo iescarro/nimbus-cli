@@ -52,7 +52,7 @@ def main():
             print("Usage: nimbus deploy [env:app|app]")
             sys.exit(1)
 
-    # System setup commands
+    # Server setup commands
     elif command == "install-lamp":
         install_lamp_stack()
     elif command == "install-lemp":
@@ -64,6 +64,7 @@ def main():
     elif command == "swap-off":
         Swap.off()
 
+    # User management
     elif command == "create-user":
         if len(sys.argv) != 4:
             print("Usage: nimbus.py create-user <username> <domain>")
