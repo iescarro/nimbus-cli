@@ -10,18 +10,19 @@ import subprocess
 import sys
 
 class DB:
+
     @staticmethod
     def create_database(db_name, db_user, db_password):
         print(f"📦 Creating MySQL database '{db_name}' and user '{db_user}'...")
 
         sql = f"""
-        CREATE DATABASE IF NOT EXISTS `{db_name}`;
-        CREATE USER IF NOT EXISTS '{db_user}'@'localhost' IDENTIFIED BY '{db_password}';
-        GRANT ALL PRIVILEGES ON `{db_name}`.* TO '{db_user}'@'localhost';
-        GRANT PROCESS ON *.* TO '{db_user}'@'localhost';
-        GRANT LOCK TABLES ON `{db_name}`.* TO '{db_user}'@'localhost';
-        GRANT SHOW VIEW ON `{db_name}`.* TO '{db_user}'@'localhost';
-        FLUSH PRIVILEGES;
+CREATE DATABASE IF NOT EXISTS `{db_name}`;
+CREATE USER IF NOT EXISTS '{db_user}'@'localhost' IDENTIFIED BY '{db_password}';
+GRANT ALL PRIVILEGES ON `{db_name}`.* TO '{db_user}'@'localhost';
+GRANT PROCESS ON *.* TO '{db_user}'@'localhost';
+GRANT LOCK TABLES ON `{db_name}`.* TO '{db_user}'@'localhost';
+GRANT SHOW VIEW ON `{db_name}`.* TO '{db_user}'@'localhost';
+FLUSH PRIVILEGES;
         """
 
         try:
