@@ -164,18 +164,22 @@ def main():
             Nginx.create_subdomain(username, domain, subdomain)
     elif command == "enable-ssl":
         if len(sys.argv) < 3:
-            print("Usage: nimbus enable-ssl <domain> [--apache] [--nginx]")
+            print("Usage: nimbus enable-ssl <domain> [--apache|--nginx]")
             print("  --apache  Use Apache (default)")
             print("  --nginx   Use Nginx")
             sys.exit(1)
         domain = sys.argv[2]
-        web_server = "apache"
-        if len(sys.argv) > 3:
-            if "--apache" in sys.argv:
-                web_server = "apache"
-            elif "--nginx" in sys.argv:
-                web_server = "nginx"
-        enable_ssl(domain, web_server)
+        server_type = "nginx"
+        flags = sys.argv[3:]
+        if "--apache" in flags and "--nginx" in flags:
+            print("Error: Choose only one: --nginx or --apache")
+            sys.exit(1)
+        elif "--apache" in flags:
+            server_type = "apache"
+        elif "--nginx" in flags:
+            server_type = "nginx"
+        enable_ssl(domain, server_type)
+
     elif command == "setup-firewall":
         from .firewall import Firewall
         Firewall.setup()
