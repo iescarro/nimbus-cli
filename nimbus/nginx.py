@@ -147,7 +147,7 @@ server {{
         subprocess.run(['sudo', 'mv', '/tmp/nginx_sub_temp.conf', conf_file], check=True)
         
         # Create symbolic link to enable site
-        subprocess.run(['sudo', 'ln', '-sf', conf_file, f'/etc/nginx/sites-enabled/{fqdn}.conf'], check=True)
+        subprocess.run(['sudo', 'ln', '-sf', conf_file, f'/etc/nginx/sites-enabled/{fqdn}'], check=True)
         
         # Test Nginx configuration
         subprocess.run(['sudo', 'nginx', '-t'], check=True)
