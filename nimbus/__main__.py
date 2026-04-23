@@ -11,7 +11,7 @@ from .app import App, init, install_lamp_stack, open_app
 from .lemp import Lemp
 from .db import DB
 from .site import enable_ssl, create_apache_site, create_apache_subdomain
-from .user import create_user, delete_user
+from .user import User
 from .swap import Swap
 
 def main():
@@ -71,13 +71,13 @@ def main():
             sys.exit(1)
         username = sys.argv[2]
         domain = sys.argv[3]
-        create_user(username, domain)
+        User.create(username, domain)s
     elif command == "delete-user":
         if len(sys.argv) != 3:
             print("Usage: nimbus.py delete-user <username>")
             sys.exit(1)
         username = sys.argv[2]
-        delete_user(username)
+        User.delete(username)
 
     # Database management commands
     elif command == "create-database":

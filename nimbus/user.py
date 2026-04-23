@@ -25,41 +25,45 @@ def is_wsl():
     except FileNotFoundError:
         return False
 
-def create_user(username, domain):
-    user_home = f"/home/{username}"
-    web_dir = f"/home/{username}/domains/{domain}/public_html"
+class User:
 
-    try:
-        import pwd
-        pwd.getpwnam(username)
-        print(f"⚠️ User '{username}' already exists. Skipping user creation.")
-    except KeyError:
-        subprocess.run(['sudo', 'adduser', '--disabled-password', '--gecos', '', username], check=True)
-        print(f"✅ User '{username}' created.")
+    @staticmethod
+    def create(username, domain):
+        user_home = f"/home/{username}"
+        web_dir = f"/home/{username}/domains/{domain}/public_html"
 
-        # Wait a moment to allow system to register the user
-        if not wait_for_user(username):
-            print(f"❌ Timeout: user '{username}' was not registered properly.")
-            return
+        try:
+            import pwd
+            pwd.getpwnam(username)
+            print(f"⚠️ User '{username}' already exists. Skipping user creation.")
+        except KeyError:
+            subprocess.run(['sudo', 'adduser', '--disabled-password', '--gecos', '', username], check=True)
+            print(f"✅ User '{username}' created.")
 
-        if is_wsl():
-            print("⏳ Detected WSL. Sleeping for 3 seconds to finalize user registration...")
-            time.sleep(3)  # Give WSL time to finalize user registration
+            # Wait a moment to allow system to register the user
+            if not wait_for_user(username):
+                print(f"❌ Timeout: user '{username}' was not registered properly.")
+                return
 
-        # Create the web directory as root
-        subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
-        write_nimbus_index(web_dir)
+            if is_wsl():
+                print("⏳ Detected WSL. Sleeping for 3 seconds to finalize user registration...")
+                time.sleep(3)  # Give WSL time to finalize user registration
 
-        subprocess.run(['sudo', 'chown', '-R', f"{username}:www-data", user_home], check=True)
-        subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
+            # Create the web directory as root
+            subprocess.run(['sudo', 'mkdir', '-p', web_dir], check=True)
+            write_nimbus_index(web_dir)
 
-        print(f"✅ User '{username}' ready. Web directory: {web_dir}")
+            subprocess.run(['sudo', 'chown', '-R', f"{username}:www-data", user_home], check=True)
+            subprocess.run(['sudo', 'chmod', '-R', '755', user_home], check=True)
 
-def delete_user(username):
-    try:
-        import pwd
-        pwd.getpwnam(username)
-        subprocess.run(['sudo', 'deluser', '--remove-home', username], check=True)
-        print(f"✅ User '{username}' deleted.")
-    except KeyError:
-        print(f"⚠️ User '{username}' does not exist. Skipping deletion.")
+            print(f"✅ User '{username}' ready. Web directory: {web_dir}")
+
+    @staticmethod
+    def delete(username):
+        try:
+            import pwd
+            pwd.getpwnam(username)
+            subprocess.run(['sudo', 'deluser', '--remove-home', username], check=True)
+            print(f"✅ User '{username}' deleted.")
+        except KeyError:
+            print(f"⚠️ User '{username}' does not exist. Skipping deletion.")
