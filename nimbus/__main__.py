@@ -7,7 +7,8 @@ import subprocess
 from .__version__ import __version__
 
 from .nimbus import say_hello, print_usage
-from .app import App, init, install_lamp_stack, open_app
+from .app import App, init, open_app
+from .lamp import Lamp
 from .lemp import Lemp
 from .db import DB
 from .site import enable_ssl, create_apache_site, create_apache_subdomain
@@ -54,7 +55,7 @@ def main():
 
     # Server setup commands
     elif command == "install-lamp":
-        install_lamp_stack()
+        Lamp.install()
     elif command == "install-lemp":
         Lemp.install()
 

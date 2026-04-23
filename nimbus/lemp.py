@@ -7,6 +7,16 @@ class Lemp:
         print("🔄 Updating system...")
         subprocess.run(['sudo', 'apt', 'update'], check=True)
         subprocess.run(['sudo', 'apt', 'upgrade', '-y'], check=True)
+
+        print("🛡️ Installing security and system management tools...")
+        subprocess.run([
+            'sudo', 'apt', 'install', '-y',
+            'ufw',
+            'rsyslog',
+            'qemu-guest-agent',
+            'fail2ban',
+            'unattended-upgrades'
+        ], check=True)
         
         print("➕ Adding PHP 8.3 repository (ppa:ondrej/php)...")
         subprocess.run(['sudo', 'apt', 'install', '-y', 'software-properties-common'], check=True)
@@ -78,7 +88,9 @@ class Lemp:
 
         print("🔐 Installing Certbot for SSL (Let's Encrypt)...")
         subprocess.run([
-            'sudo', 'apt', 'install', '-y', 'certbot', 'python3-certbot-nginx'  # Note: certbot-nginx instead of apache
+            'sudo', 'apt', 'install', '-y',
+            'certbot',
+            'python3-certbot-nginx'
         ], check=True)
 
         # Create a default Nginx server block for PHP
