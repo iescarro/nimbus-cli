@@ -96,7 +96,7 @@ server {{
     def create_subdomain(username, domain, subdomain):
         fqdn = f"{subdomain}.{domain}"
         base_dir = f"/home/{username}/domains/{domain}/{subdomain}"
-        conf_file = f"/etc/nginx/sites-available/{fqdn}.conf"
+        conf_file = f"/etc/nginx/sites-available/{fqdn}"
         log_name = f"{subdomain}_{domain}".replace('.', '_')
 
         # Create directory structure
@@ -112,32 +112,32 @@ server {{
 
         # Nginx config content for subdomain
         nginx_config = f"""
-    server {{
-        listen 80;
-        listen [::]:80;
-        
-        server_name {fqdn};
-        
-        root {base_dir}/public;
-        index index.php index.html index.htm;
-        
-        access_log /var/log/nginx/{log_name}_access.log;
-        error_log /var/log/nginx/{log_name}_error.log;
-        
-        location / {{
-            try_files $uri $uri/ /index.php?$query_string;
-        }}
-        
-        location ~ \\.php$ {{
-            include snippets/fastcgi-php.conf;
-            fastcgi_pass {php_socket};
-        }}
-        
-        location ~ /\.ht {{
-            deny all;
-        }}
+server {{
+    listen 80;
+    listen [::]:80;
+    
+    server_name {fqdn};
+    
+    root {base_dir}/public;
+    index index.php index.html index.htm;
+    
+    access_log /var/log/nginx/{log_name}_access.log;
+    error_log /var/log/nginx/{log_name}_error.log;
+    
+    location / {{
+        try_files $uri $uri/ /index.php?$query_string;
     }}
-    """
+    
+    location ~ \\.php$ {{
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass {php_socket};
+    }}
+    
+    location ~ /\.ht {{
+        deny all;
+    }}
+}}
+"""
 
         # Write Nginx config to temp file
         with open('/tmp/nginx_sub_temp.conf', 'w') as temp_conf:
