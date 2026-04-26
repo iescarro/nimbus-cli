@@ -18,43 +18,44 @@ class Lamp:
             'unattended-upgrades'
         ], check=True)
         
-        print("➕ Adding PHP 8.3 repository (ppa:ondrej/php)...")
+        php_version = '7.4'
+        print(f"➕ Adding PHP {php_version} repository (ppa:ondrej/php)...")
         subprocess.run(['sudo', 'apt', 'install', '-y', 'software-properties-common'], check=True)
-        subprocess.run(['sudo', 'add-apt-repository', '-y', 'ppa:ondrej/php'], check=True)
+        subprocess.run(['sudo', 'add-apt-repository', '-y', f'ppa:ondrej/php'], check=True)
         subprocess.run(['sudo', 'apt', 'update'], check=True)
 
-        print("🌐 Installing Apache, MySQL, PHP 8.3, and essential modules...")
+        print(f"🌐 Installing Apache, MySQL, PHP {php_version}, and essential modules...")
         subprocess.run([
             'sudo', 'apt', 'install', '-y',
             'apache2',
             'mysql-server',
-            'php8.3',
-            'libapache2-mod-php8.3',
-            'php8.3-mysql',
+            f'php{php_version}',
+            f'libapache2-mod-php{php_version}',
+            f'php{php_version}-mysql',
             'zip',
             'unzip'
         ], check=True)
 
-        print("🧩 Installing PHP 8.3 extensions...")
+        print(f"🧩 Installing PHP {php_version} extensions...")
         subprocess.run([
             'sudo', 'apt', 'install', '-y',
-            'php8.3-mbstring',
-            'php8.3-xml',
-            'php8.3-curl',
-            'php8.3-mysql',
-            'php8.3-zip',
-            'php8.3-gd',
-            'php8.3-sqlite3',
+            f'php{php_version}-mbstring',
+            f'php{php_version}-xml',
+            f'php{php_version}-curl',
+            f'php{php_version}-mysql',
+            f'php{php_version}-zip',
+            f'php{php_version}-gd',
+            f'php{php_version}-sqlite3',
             'sqlite3'
         ], check=True)
 
-        # Set PHP 8.3 as the default CLI version
-        print("⚙️ Setting PHP 8.3 as default...")
-        subprocess.run(['sudo', 'update-alternatives', '--set', 'php', '/usr/bin/php8.3'], check=True)
+        # Set PHP as the default CLI version
+        print(f"⚙️ Setting PHP {php_version} as default...")
+        subprocess.run(['sudo', 'update-alternatives', '--set', 'php', f'/usr/bin/php{php_version}'], check=True)
         
-        # Enable PHP 8.3 for Apache
-        print("🔧 Enabling PHP 8.3 in Apache...")
-        subprocess.run(['sudo', 'a2enmod', 'php8.3'], check=True)
+        # Enable PHP for Apache
+        print(f"🔧 Enabling PHP {php_version} in Apache...")
+        subprocess.run(['sudo', 'a2enmod', f'php{php_version}'], check=True)
         
         # Enable Apache rewrite module
         print("🔄 Enabling Apache rewrite module...")
@@ -90,4 +91,4 @@ class Lamp:
         print("🔄 Restarting Apache...")
         subprocess.run(['sudo', 'systemctl', 'restart', 'apache2'], check=True)
 
-        print("✅ All done! LAMP stack with PHP 8.3, Python, Certbot, and tools installed.")
+        print(f"✅ All done! LAMP stack with PHP {php_version}, Python, Certbot, and tools installed.")
