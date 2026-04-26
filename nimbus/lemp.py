@@ -18,7 +18,7 @@ class Lemp:
             'unattended-upgrades'
         ], check=True)
         
-        php_version = "8.2"
+        php_version = "8.3"
         print(f"➕ Adding PHP {php_version} repository (ppa:ondrej/php)...")
         subprocess.run(['sudo', 'apt', 'install', '-y', 'software-properties-common'], check=True)
         subprocess.run(['sudo', 'add-apt-repository', '-y', f'ppa:ondrej/php'], check=True)
