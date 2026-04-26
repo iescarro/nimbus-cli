@@ -66,6 +66,10 @@ def main():
     elif command == "swap-off":
         Swap.off()
 
+    # Additional security and configuration commands
+    elif command == "setup-firewall":
+        from .firewall import Firewall
+        Firewall.setup()        
     elif command == "create-custom-settings":
         if len(sys.argv) != 3:
             print("Usage: nimbus create-custom-settings")
@@ -180,9 +184,6 @@ def main():
             server_type = "nginx"
         enable_ssl(domain, server_type)
 
-    elif command == "setup-firewall":
-        from .firewall import Firewall
-        Firewall.setup()
 
     # elif command == "db:migrate":
     #     if len(sys.argv) != 2:
