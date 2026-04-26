@@ -18,38 +18,39 @@ class Lemp:
             'unattended-upgrades'
         ], check=True)
         
-        print("➕ Adding PHP 8.3 repository (ppa:ondrej/php)...")
+        php_version = "8.2"
+        print(f"➕ Adding PHP {php_version} repository (ppa:ondrej/php)...")
         subprocess.run(['sudo', 'apt', 'install', '-y', 'software-properties-common'], check=True)
-        subprocess.run(['sudo', 'add-apt-repository', '-y', 'ppa:ondrej/php'], check=True)
+        subprocess.run(['sudo', 'add-apt-repository', '-y', f'ppa:ondrej/php'], check=True)
         subprocess.run(['sudo', 'apt', 'update'], check=True)
 
-        print("🌐 Installing Nginx, MySQL, PHP 8.3, and essential modules...")
+        print(f"🌐 Installing Nginx, MySQL, PHP {php_version}, and essential modules...")
         subprocess.run([
             'sudo', 'apt', 'install', '-y',
             'nginx',
             'mysql-server',
-            'php8.3-fpm',
-            'php8.3-mysql',  # Note: php8.3-fpm instead of libapache2-mod-php8.3
+            f'php{php_version}-fpm',
+            f'php{php_version}-mysql',  # Note: php{php_version}-fpm instead of libapache2-mod-php{php_version}
             'zip',
             'unzip'
         ], check=True)
 
-        print("🧩 Installing PHP 8.3 extensions...")
+        print(f"🧩 Installing PHP {php_version} extensions...")
         subprocess.run([
             'sudo', 'apt', 'install', '-y',
-            'php8.3-mbstring',
-            'php8.3-xml',
-            'php8.3-curl',
-            'php8.3-mysql',
-            'php8.3-zip',
-            'php8.3-gd',
-            'php8.3-sqlite3',
+            f'php{php_version}-mbstring',
+            f'php{php_version}-xml',
+            f'php{php_version}-curl',
+            f'php{php_version}-mysql',
+            f'php{php_version}-zip',
+            f'php{php_version}-gd',
+            f'php{php_version}-sqlite3',
             'sqlite3'
         ], check=True)
 
-        # Set PHP 8.3 as the default CLI version
-        print("⚙️ Setting PHP 8.3 as default...")
-        subprocess.run(['sudo', 'update-alternatives', '--set', 'php', '/usr/bin/php8.3'], check=True)
+        # Set PHP as the default CLI version
+        print(f"⚙️ Setting PHP {php_version} as default...")
+        subprocess.run(['sudo', 'update-alternatives', '--set', 'php', f'/usr/bin/php{php_version}'], check=True)
         
         # Start and enable Nginx
         print("🚀 Starting and enabling Nginx...")
@@ -58,15 +59,15 @@ class Lemp:
         
         # Start and enable PHP-FPM
         print("🚀 Starting and enabling PHP-FPM...")
-        subprocess.run(['sudo', 'systemctl', 'start', 'php8.3-fpm'], check=True)
-        subprocess.run(['sudo', 'systemctl', 'enable', 'php8.3-fpm'], check=True)
+        subprocess.run(['sudo', 'systemctl', 'start', f'php{php_version}-fpm'], check=True)
+        subprocess.run(['sudo', 'systemctl', 'enable', f'php{php_version}-fpm'], check=True)
 
         # Configure PHP-FPM for better performance
         print("⚙️ Optimizing PHP-FPM configuration...")
-        subprocess.run(['sudo', 'sed', '-i', 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/', '/etc/php/8.3/fpm/php.ini'], check=True)
+        subprocess.run(['sudo', 'sed', '-i', f's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/', f'/etc/php/{php_version}/fpm/php.ini'], check=True)
         
         # Restart PHP-FPM to apply changes
-        subprocess.run(['sudo', 'systemctl', 'restart', 'php8.3-fpm'], check=True)
+        subprocess.run(['sudo', 'systemctl', 'restart', f'php{php_version}-fpm'], check=True)
 
         print("🧬 Installing Git...")
         subprocess.run(['sudo', 'apt', 'install', '-y', 'git'], check=True)
@@ -95,29 +96,29 @@ class Lemp:
 
         # Create a default Nginx server block for PHP
         print("📝 Creating default Nginx server block for PHP...")
-        nginx_config = """
-    server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-        
-        root /var/www/html;
-        index index.php index.html index.htm;
-        
-        server_name _;
-        
-        location / {
-            try_files $uri $uri/ =404;
-        }
-        
-        location ~ \.php$ {
-            include snippets/fastcgi-php.conf;
-            fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
-        }
-        
-        location ~ /\.ht {
-            deny all;
-        }
-    }
+        nginx_config = f"""
+server {{
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
+    root /var/www/html;
+    index index.php index.html index.htm;
+    
+    server_name _;
+    
+    location / {{
+        try_files $uri $uri/ =404;
+    }}
+    
+    location ~ \.php$ {{
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php{php_version}-fpm.sock;
+    }}
+    
+    location ~ /\.ht {{
+        deny all;
+    }}
+}}
     """
         
         # Write the config to file
@@ -141,6 +142,6 @@ class Lemp:
         #     f.write(php_info)
         # subprocess.run(['sudo', 'mv', '/tmp/info.php', '/var/www/html/info.php'], check=True)
 
-        print("✅ All done! LEMP stack with PHP 8.3, Python, Certbot, and tools installed.")
+        print(f"✅ All done! LEMP stack with PHP {php_version}, Python, Certbot, and tools installed.")
         # print("🌐 Test PHP at: http://YOUR_SERVER_IP/info.php")
         # print("ℹ️  Remember to delete info.php after testing for security!")
