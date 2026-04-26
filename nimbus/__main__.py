@@ -10,7 +10,6 @@ from .nimbus import say_hello, print_usage
 from .app import App, create_custom_settings, init, open_app
 from .lamp import Lamp
 from .lemp import Lemp
-from .nginx import Nginx
 from .db import DB
 from .site import enable_ssl, create_apache_site, create_apache_subdomain
 from .user import User
@@ -141,6 +140,7 @@ def main():
             from .site import create_apache_site
             create_apache_site(username, domain)
         else:
+            from .nginx import Nginx
             Nginx.create_site(username, domain)
     elif command == "create-subdomain":
         if len(sys.argv) < 5:
