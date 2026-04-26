@@ -14,6 +14,7 @@ from .db import DB
 from .site import enable_ssl, create_apache_site, create_apache_subdomain
 from .user import User
 from .swap import Swap
+from .file import File
 
 def main():
     if len(sys.argv) < 2:
@@ -184,6 +185,12 @@ def main():
             server_type = "nginx"
         enable_ssl(domain, server_type)
 
+    elif command == "backup-files":
+        if len(sys.argv) < 2:
+            print("Usage: nimbus backup-files <source_app:file>")
+            sys.exit(1)
+        source = sys.argv[2] if len(sys.argv) > 2 else "default:default"
+        File.backup(source)
 
     # elif command == "db:migrate":
     #     if len(sys.argv) != 2:
