@@ -29,6 +29,8 @@ server {{
     listen [::]:80;
     
     server_name {domain} www.{domain};
+
+    client_max_body_size 100M;
     
     root {base_dir};
     index index.php index.html index.htm;
@@ -117,6 +119,8 @@ server {{
     listen [::]:80;
     
     server_name {fqdn};
+
+    client_max_body_size 100M;
     
     root {base_dir}/public;
     index index.php index.html index.htm;
