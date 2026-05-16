@@ -105,6 +105,8 @@ server {{
     index index.php index.html index.htm;
     
     server_name _;
+
+    client_max_body_size 100M;
     
     location / {{
         try_files $uri $uri/ =404;
